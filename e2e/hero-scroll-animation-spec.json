@@ -1,0 +1,176 @@
+{
+  "hero_scroll_sequence": {
+    "overview": "Scroll-driven 3-phase hero: portrait visible → zoom into forehead → vertical split reveals blog content beneath. Creates the illusion of entering the subject's mind.",
+    "scroll_container": "The hero section height is 300vh (3x viewport). The viewport pins the hero (position: sticky, top: 0, h-screen) while the user scrolls through the 300vh wrapper. scrollYProgress 0→1 maps across the full 300vh.",
+
+    "phase_1_initial": {
+      "scroll_range": "0% → 0%",
+      "description": "Page load state. Portrait fully visible, entry animations play.",
+      "state": {
+        "image": { "scale": 1, "transformOrigin": "center 20%", "clipPath": "inset(0 0 0 0)" },
+        "name_text": { "opacity": 1, "y": 0 },
+        "nav": { "opacity": 1, "filter": "blur(0px)", "pointerEvents": "auto" },
+        "vignettes": { "opacity": 1 },
+        "grain": { "opacity": 0.6 },
+        "blog_content_below": { "opacity": 0 }
+      }
+    },
+
+    "phase_2_zoom": {
+      "scroll_range": "0% → 40%",
+      "description": "Image progressively zooms into the top of the head (forehead/crown area). Name fades out. Nav fades out. Vignettes tighten. The feeling is being pulled into the person's mind.",
+      "animations": {
+        "image_zoom": {
+          "property": "scale",
+          "from": 1,
+          "to": 2.8,
+          "transformOrigin": "center 20%",
+          "note": "20% from top = forehead area. Scale origin stays fixed so zoom targets the head, not center of frame."
+        },
+        "name_fadeout": {
+          "scroll_range": "0% → 15%",
+          "properties": {
+            "opacity": { "from": 1, "to": 0 },
+            "y": { "from": 0, "to": -60 },
+            "filter": { "from": "blur(0px)", "to": "blur(6px)" }
+          },
+          "note": "Name exits early so it's gone well before the split. Slides up + blurs as it fades."
+        },
+        "nav_fadeout": {
+          "scroll_range": "5% → 20%",
+          "properties": {
+            "opacity": { "from": 1, "to": 0 },
+            "filter": { "from": "blur(0px)", "to": "blur(4px)" },
+            "pointerEvents": "none when opacity < 0.5"
+          }
+        },
+        "vignette_intensify": {
+          "scroll_range": "0% → 40%",
+          "properties": {
+            "left_vignette_width": { "from": "40%", "to": "50%" },
+            "right_vignette_width": { "from": "40%", "to": "50%" },
+            "opacity": { "from": 1, "to": 0.6 }
+          },
+          "note": "Vignettes close in slightly, then fade as image fills the frame."
+        },
+        "bottom_gradient_fadeout": {
+          "scroll_range": "10% → 30%",
+          "opacity": { "from": 1, "to": 0 },
+          "note": "The bottom fade-to-cream disappears since we're zooming past it."
+        }
+      }
+    },
+
+    "phase_3_split": {
+      "scroll_range": "40% → 70%",
+      "description": "The zoomed image splits vertically down the center. Left half slides left, right half slides right. Clean cut. Blog content is revealed beneath as the halves separate.",
+      "implementation": {
+        "technique": "Two identical images with clipPath. Left half clips to left 50%, right half clips to right 50%. On split, each slides outward.",
+        "note": "At scroll 40%, replace the single image with two clipped copies (or switch clipPath on a single image to two layers). This must be seamless — no visible pop."
+      },
+      "animations": {
+        "left_half": {
+          "clipPath": "inset(0 50% 0 0)",
+          "translateX": { "from": "0%", "to": "-105%" },
+          "note": "Slides fully off-screen left. 105% ensures no sub-pixel edge visible."
+        },
+        "right_half": {
+          "clipPath": "inset(0 0 0 50%)",
+          "translateX": { "from": "0%", "to": "105%" },
+          "note": "Slides fully off-screen right."
+        },
+        "split_edge_shadow": {
+          "property": "box-shadow or pseudo-element",
+          "description": "Subtle dark shadow on the inner edges of each half as they separate, creating depth. Fades in at 42%, gone by 65%.",
+          "value": "inset 4px 0 20px rgba(0,0,0,0.4) on right edge of left half, inset -4px 0 20px rgba(0,0,0,0.4) on left edge of right half"
+        },
+        "background_reveal": {
+          "scroll_range": "42% → 60%",
+          "properties": {
+            "opacity": { "from": 0, "to": 1 }
+          },
+          "note": "The blog content section fades in as the gap between halves widens. Starts slightly after split begins so there's a moment of dark void first."
+        },
+        "remaining_overlays_fadeout": {
+          "scroll_range": "40% → 50%",
+          "description": "Any remaining vignettes, grain fade to 0."
+        }
+      }
+    },
+
+    "phase_4_settled": {
+      "scroll_range": "70% → 100%",
+      "description": "Image halves are fully off-screen. Blog content is fully visible. Nav reappears. Scroll continues naturally into blog content below.",
+      "animations": {
+        "nav_reappear": {
+          "scroll_range": "65% → 75%",
+          "properties": {
+            "opacity": { "from": 0, "to": 1 },
+            "filter": { "from": "blur(4px)", "to": "blur(0px)" },
+            "pointerEvents": "auto when opacity > 0.5"
+          },
+          "note": "Nav returns but now over the blog content, not the hero image. Could transition to a solid/frosted bg since it's over light content now."
+        },
+        "blog_content": {
+          "state": "Fully visible, interactive, normal scroll behavior resumes."
+        }
+      }
+    },
+
+    "framer_motion_implementation": {
+      "scroll_tracking": {
+        "hook": "useScroll",
+        "target": "ref to the 300vh wrapper div",
+        "offset": ["start start", "end end"],
+        "returns": "scrollYProgress (0 to 1)"
+      },
+      "transforms": {
+        "image_scale": "useTransform(scrollYProgress, [0, 0.4], [1, 2.8])",
+        "name_opacity": "useTransform(scrollYProgress, [0, 0.15], [1, 0])",
+        "name_y": "useTransform(scrollYProgress, [0, 0.15], [0, -60])",
+        "name_blur": "useTransform(scrollYProgress, [0, 0.15], [0, 6])",
+        "nav_opacity": "useTransform(scrollYProgress, [0.05, 0.2, 0.65, 0.75], [1, 0, 0, 1])",
+        "left_x": "useTransform(scrollYProgress, [0.4, 0.7], ['0%', '-105%'])",
+        "right_x": "useTransform(scrollYProgress, [0.4, 0.7], ['0%', '105%'])",
+        "content_opacity": "useTransform(scrollYProgress, [0.42, 0.6], [0, 1])",
+        "vignette_opacity": "useTransform(scrollYProgress, [0, 0.5], [1, 0])",
+        "grain_opacity": "useTransform(scrollYProgress, [0.3, 0.5], [0.6, 0])"
+      },
+      "motion_values_to_css": {
+        "blur_template": "useMotionTemplate from framer-motion: `blur(${blurValue}px)`",
+        "note": "filter property needs template string, not raw number"
+      }
+    },
+
+    "dom_structure": {
+      "description": "How the hero HTML should be structured to support the split",
+      "structure": [
+        "div.hero-wrapper (h-[300vh] relative)",
+        "  div.hero-sticky (sticky top-0 h-screen overflow-hidden)",
+        "    div.image-left (absolute inset-0, clipPath inset(0 50% 0 0), will-change: transform)",
+        "      next/image (fill, priority, objectFit cover, objectPosition center 20%, scale driven by scroll)",
+        "      div.inner-shadow-right (appears during split)",
+        "    div.image-right (absolute inset-0, clipPath inset(0 0 0 50%), will-change: transform)",
+        "      next/image (fill, same as left — these are two copies of same image)",
+        "      div.inner-shadow-left (appears during split)",
+        "    div.vignettes (left, right, top, bottom gradients — same as current)",
+        "    div.grain-overlay",
+        "    div.name-container (animated name text)",
+        "    div.blog-content-preview (the content revealed behind the split, opacity animated)",
+        "  nav.floating-nav (fixed, z-50, opacity driven by scroll)"
+      ]
+    },
+
+    "performance": {
+      "will_change": "Apply to both image halves and nav: will-change: transform, opacity",
+      "gpu_acceleration": "Use translate3d(x, 0, 0) not translateX for GPU compositing",
+      "image_copies": "Two next/image elements with same src — browser deduplicates the download, just renders twice with different clip paths",
+      "overflow": "hero-sticky must have overflow: hidden to prevent image halves bleeding during slide",
+      "pointer_events": "All decorative overlays pointer-events-none. Nav pointer-events toggled with opacity."
+    },
+
+    "entry_animations_unchanged": {
+      "note": "The initial load animations from the current hero stay the same: per-letter name reveal with stagger, Framer Motion. These play on mount, before any scrolling happens. The scroll sequence begins after."
+    }
+  }
+}

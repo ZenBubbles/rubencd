@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "articles": "Articles",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLanguage": "Norsk",
+    "navigationMenu": "Navigation menu"
+  },
+  "hero": {
+    "ariaLabel": "Ruben Christoffer Damsgaard"
+  },
+  "articles": {
+    "latestWriting": "Latest Writing",
+    "heading": "Ideas worth",
+    "headingItalic": "reading slowly.",
+    "readFullStory": "Read Full Story",
+    "featured": {
+      "category": "AI & Software",
+      "date": "Mar 5, 2026",
+      "title": "Is Software and SaaS Dying?",
+      "excerpt": "How the advancements of AI are eroding traditional software moats, while simultaneously expanding what software can do and the scale of problems it can solve.",
+      "imageAlt": "Article image for Is Software and SaaS Dying?"
+    },
+    "article1": {
+      "category": "AI & Software",
+      "date": "Mar 5, 2026",
+      "title": "Is Software and SaaS Dying?",
+      "excerpt": "How the advancements of AI are eroding traditional software moats, while simultaneously expanding what software can do and the scale of problems it can solve.",
+      "readTime": "5 MIN READ",
+      "imageAlt": "Article image for Is Software and SaaS Dying?"
+    }
+  },
+  "newsletter": {
+    "title": "Subscribe to the newsletter",
+    "description": "Get the latest articles and design resources sent to your inbox weekly.",
+    "privacyNote": "We respect your privacy and inbox zero.",
+    "placeholder": "email@example.com",
+    "subscribe": "Subscribe",
+    "success": "Thank you for subscribing! You'll hear from us soon.",
+    "errorInvalid": "Please enter a valid email address.",
+    "emailLabel": "Email address"
+  },
+  "footer": {
+    "copyright": "2026 Ruben Christoffer Damsgaard."
+  },
+  "skipToContent": "Skip to content",
+  "blog": {
+    "title": "Blog",
+    "loading": "Loading...",
+    "articleComingSoon": "Full article coming soon.",
+    "articleSubtitle": "How the advancements of AI are eroding traditional software moats, while simultaneously expanding what software can do and the scale of problems it can solve."
+  },
+  "about": {
+    "title": "About"
+  },
+  "contact": {
+    "title": "Contact"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist."
+  },
+  "metadata": {
+    "homeTitle": "Ruben Christoffer Damsgaard — Blog",
+    "homeDescription": "Writing about AI Agents, Machine Learning, Embedding Models, UI/UX, startups, and design.",
+    "siteTitle": "Ruben CD",
+    "siteDescription": "AI Agents, Machine Learning, Embedding Models, UI/UX by Ruben Christoffer Damsgaard",
+    "blogTitle": "Blog"
+  }
+}

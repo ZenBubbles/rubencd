@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "articles": "Artikler",
+    "contact": "Kontakt",
+    "openMenu": "Åpne meny",
+    "closeMenu": "Lukk meny",
+    "switchLanguage": "English",
+    "navigationMenu": "Navigasjonsmeny"
+  },
+  "hero": {
+    "ariaLabel": "Ruben Christoffer Damsgaard"
+  },
+  "articles": {
+    "latestWriting": "Siste innlegg",
+    "heading": "Ideer verdt å",
+    "headingItalic": "lese sakte.",
+    "readFullStory": "Les hele artikkelen",
+    "featured": {
+      "category": "KI og programvare",
+      "date": "5. mars 2026",
+      "title": "Er programvare og SaaS i ferd med å dø?",
+      "excerpt": "Hvordan fremskrittene innen KI eroderer tradisjonelle programvarefordeler, samtidig som de utvider hva programvare kan gjøre og omfanget av problemer den kan løse.",
+      "imageAlt": "Artikkelbilde for Er programvare og SaaS i ferd med å dø?"
+    },
+    "article1": {
+      "category": "KI og programvare",
+      "date": "5. mars 2026",
+      "title": "Er programvare og SaaS i ferd med å dø?",
+      "excerpt": "Hvordan fremskrittene innen KI eroderer tradisjonelle programvarefordeler, samtidig som de utvider hva programvare kan gjøre og omfanget av problemer den kan løse.",
+      "readTime": "5 MIN LESETID",
+      "imageAlt": "Artikkelbilde for Er programvare og SaaS i ferd med å dø?"
+    }
+  },
+  "newsletter": {
+    "title": "Abonner på nyhetsbrevet",
+    "description": "Få de nyeste artiklene og designressursene rett i innboksen din hver uke.",
+    "privacyNote": "Vi respekterer personvernet ditt og innboks null.",
+    "placeholder": "epost@eksempel.no",
+    "subscribe": "Abonner",
+    "success": "Takk for at du abonnerer! Du hører fra oss snart.",
+    "errorInvalid": "Vennligst skriv inn en gyldig e-postadresse.",
+    "emailLabel": "E-postadresse"
+  },
+  "footer": {
+    "copyright": "2026 Ruben Christoffer Damsgaard."
+  },
+  "skipToContent": "Hopp til innhold",
+  "blog": {
+    "title": "Blogg",
+    "loading": "Laster...",
+    "articleComingSoon": "Hele artikkelen kommer snart.",
+    "articleSubtitle": "Hvordan fremskrittene innen KI eroderer tradisjonelle programvarefordeler, samtidig som de utvider hva programvare kan gjøre og omfanget av problemer den kan løse."
+  },
+  "about": {
+    "title": "Om"
+  },
+  "contact": {
+    "title": "Kontakt"
+  },
+  "notFound": {
+    "title": "Siden ble ikke funnet",
+    "description": "Siden du leter etter finnes ikke."
+  },
+  "metadata": {
+    "homeTitle": "Ruben Christoffer Damsgaard — Blogg",
+    "homeDescription": "Skriver om KI-agenter, maskinlæring, innbyggingsmodeller, UI/UX, oppstartsbedrifter og design.",
+    "siteTitle": "Ruben CD",
+    "siteDescription": "KI-agenter, maskinlæring, innbyggingsmodeller, UI/UX av Ruben Christoffer Damsgaard",
+    "blogTitle": "Blogg"
+  }
+}
