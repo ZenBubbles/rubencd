@@ -52,6 +52,14 @@ describe("Nav", () => {
     expect(setMobileMenuOpen).toHaveBeenCalledWith(false);
   });
 
+  it("RCD. logo is a link element", () => {
+    render(<Nav mobileMenuOpen={false} setMobileMenuOpen={vi.fn()} />);
+    const logo = screen.getByText("RCD.");
+    const linkElement = logo.closest("a") ?? (logo.tagName === "A" ? logo : null);
+    expect(linkElement).not.toBeNull();
+    expect(linkElement).toHaveAttribute("href");
+  });
+
   it("accepts scrollProgress prop without error", () => {
     const mockMotionValue = { on: () => () => {}, get: () => 0 };
     // Should not throw when scrollProgress is provided

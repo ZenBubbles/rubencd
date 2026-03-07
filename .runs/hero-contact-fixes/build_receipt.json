@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "run_id": "hero-contact-fixes",
+    "timestamp": "2026-03-06T00:00:00Z",
+    "branch": "main",
+    "project": "rubencdblog",
+    "receipt_version": "1.0"
+  },
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "description": "Hero image uses 100% width instead of 100vw",
+      "status": "VERIFIED",
+      "evidence": "hero.tsx: width changed from '100vw' to '100%'; hero.test.tsx: test asserts 100% width"
+    },
+    {
+      "id": "REQ-2",
+      "description": "Hero image objectPosition set to center bottom",
+      "status": "VERIFIED",
+      "evidence": "hero.tsx: objectPosition changed to 'center bottom'; hero.test.tsx: test asserts bottom-center position"
+    },
+    {
+      "id": "REQ-3",
+      "description": "Hero split animation range widened and transform origins adjusted",
+      "status": "VERIFIED",
+      "evidence": "hero.tsx: split range [0.35,0.65] -> [0.25,0.75], transformOrigin 'center 20%' -> 'center 30%', shadow/bg ranges adjusted"
+    },
+    {
+      "id": "REQ-4",
+      "description": "Horizontal overflow hidden on html element",
+      "status": "VERIFIED",
+      "evidence": "globals.css: overflow-x: hidden added to html"
+    },
+    {
+      "id": "REQ-5",
+      "description": "Nav scroll-driven text color transition (white to dark)",
+      "status": "VERIFIED",
+      "evidence": "nav.tsx: scroll-driven textColor and textShadow transforms added, hardcoded text-white removed, dynamic color via motion style props"
+    },
+    {
+      "id": "REQ-6",
+      "description": "Nav logo is a clickable link",
+      "status": "VERIFIED",
+      "evidence": "nav.tsx: <div> logo replaced with <motion.a href='#'>; nav.test.tsx: test asserts logo is a link"
+    },
+    {
+      "id": "REQ-7",
+      "description": "Contact form replaces newsletter section with liquid glass design",
+      "status": "VERIFIED",
+      "evidence": "newsletter-section.tsx: full rewrite with name+email contact form, 7-layer liquid glass CSS (backdrop blur+saturate, glass tint gradient, specular highlight, refraction border, depth shadow, top shine, rounded corners 22px), dark liquid glass submit button"
+    },
+    {
+      "id": "REQ-8",
+      "description": "Contact form has proper validation and a11y",
+      "status": "VERIFIED",
+      "evidence": "newsletter-section.tsx: role='alert' and aria-invalid added (task #9 fix); newsletter-section.test.tsx: 8 tests including 3 sad-path validation tests"
+    },
+    {
+      "id": "REQ-9",
+      "description": "Hardcoded English strings extracted to i18n",
+      "status": "VERIFIED",
+      "evidence": "5 strings replaced with t() calls, keys added to en.json and nb.json (task #9)"
+    },
+    {
+      "id": "REQ-10",
+      "description": "No non-compositor animations (filter blur removed)",
+      "status": "VERIFIED",
+      "evidence": "hero.tsx and nav.tsx: filter blur animations removed (task #9 CRITICAL fix)"
+    },
+    {
+      "id": "REQ-11",
+      "description": "Nav touch targets meet 44px minimum",
+      "status": "VERIFIED",
+      "evidence": "nav.tsx: min-h-[44px] added to nav links (task #9)"
+    },
+    {
+      "id": "REQ-12",
+      "description": "Redundant will-change removed from hero",
+      "status": "VERIFIED",
+      "evidence": "hero.tsx: redundant will-change removed from hero halves (task #9)"
+    }
+  ],
+  "test_execution": {
+    "command": "pnpm test",
+    "exit_code": 0,
+    "total": 72,
+    "passed": 72,
+    "failed": 0,
+    "skipped": 0,
+    "test_files": 10,
+    "test_suites": [
+      {
+        "file": "hero.test.tsx",
+        "tests_added": 2,
+        "covers": ["100% width", "bottom-center position"]
+      },
+      {
+        "file": "nav.test.tsx",
+        "tests_added": 1,
+        "covers": ["logo is link"]
+      },
+      {
+        "file": "newsletter-section.test.tsx",
+        "tests_added": 8,
+        "covers": ["contact form fields", "validation", "a11y", "liquid glass structure"]
+      }
+    ]
+  },
+  "mutation_testing": {
+    "mutations_run": 3,
+    "mutations_killed": 3,
+    "mutations_survived": 0,
+    "details": [
+      {
+        "id": "M1",
+        "description": "Flip !name.trim() to name.trim()",
+        "result": "KILLED",
+        "tests_failed": 3
+      },
+      {
+        "id": "M2",
+        "description": "Remove name validation guard",
+        "result": "KILLED",
+        "tests_failed": 2
+      },
+      {
+        "id": "M3",
+        "description": "Change objectPosition back to 'center 20%'",
+        "result": "KILLED",
+        "tests_failed": 1
+      }
+    ],
+    "final_run": {
+      "total": 72,
+      "passed": 72,
+      "exit_code": 0
+    }
+  },
+  "build_verification": {
+    "build": {
+      "command": "pnpm build",
+      "exit_code": 0,
+      "pages": 24,
+      "duration_seconds": 8.9
+    },
+    "typecheck": {
+      "command": "pnpm typecheck",
+      "exit_code": 0,
+      "errors": 0
+    },
+    "lint": {
+      "command": "pnpm lint",
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 2,
+      "warnings_note": "pre-existing, not introduced by this change"
+    }
+  },
+  "security_review": [
+    {
+      "check": "No new env vars introduced",
+      "result": "PASS",
+      "evidence": "All env vars are pre-existing (NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET, NEXT_PUBLIC_SITE_URL, SANITY_API_READ_TOKEN, REVALIDATE_SECRET)"
+    },
+    {
+      "check": "No secrets in committed code",
+      "result": "PASS",
+      "evidence": "Only UI component files, CSS, i18n JSON, and test files changed"
+    },
+    {
+      "check": "No XSS vectors in form",
+      "result": "PASS",
+      "evidence": "Contact form uses controlled React state; no dangerouslySetInnerHTML"
+    },
+    {
+      "check": "aria-invalid and role='alert' for form errors",
+      "result": "PASS",
+      "evidence": "Added in task #9 fix"
+    }
+  ],
+  "critic_verdicts": [
+    {
+      "critic": "code-critic (task #6)",
+      "verdict": "VERIFIED",
+      "critical": 0,
+      "major": 1,
+      "minor": 2,
+      "notes": "1 MAJOR (hardcoded strings) fixed in task #9. 2 MINOR (prefers-reduced-motion out of scope, error color acceptable)."
+    },
+    {
+      "critic": "frontend-checker (task #7)",
+      "verdict": "VERIFIED",
+      "critical": 1,
+      "major": 5,
+      "minor": 4,
+      "notes": "1 CRITICAL (filter blur) + 4 MAJOR fixed in task #9. 1 MAJOR (SVG filters) pre-existing/out of scope. 4 MINOR pre-existing or handled."
+    },
+    {
+      "critic": "test-critic (task #8)",
+      "verdict": "VERIFIED",
+      "critical": 0,
+      "major": 6,
+      "minor": 2,
+      "notes": "All 6 MAJOR gaps fixed in task #10."
+    }
+  ],
+  "performance_flags": {
+    "bundle_size": "Not measured (no regression expected; only UI component changes)",
+    "notes": [
+      "Filter blur animations removed — improves scroll performance by staying on compositor thread",
+      "Redundant will-change removed — reduces GPU memory usage",
+      "Pre-existing: WatercolorPlant SVG feTurbulence recomputes every frame on Safari (out of scope)"
+    ]
+  },
+  "files_changed": [
+    "src/app/[locale]/(public)/components/hero.tsx",
+    "src/app/[locale]/(public)/components/nav.tsx",
+    "src/app/[locale]/(public)/components/newsletter-section.tsx",
+    "src/styles/globals.css",
+    "messages/en.json",
+    "messages/nb.json",
+    "src/app/[locale]/(public)/components/__tests__/hero.test.tsx",
+    "src/app/[locale]/(public)/components/__tests__/nav.test.tsx",
+    "src/app/[locale]/(public)/components/__tests__/newsletter-section.test.tsx"
+  ],
+  "explicit_gaps": [
+    "No visual/screenshot regression tests — liquid glass design accuracy requires human review in-browser",
+    "No Playwright E2E tests for scroll-driven animations or form interactions",
+    "WatercolorPlant SVG filters: pre-existing Safari performance issue (feTurbulence recomputed every frame) — out of scope",
+    "OG image hero.png declared as 1200x630 but is a portrait photo — may not match actual dimensions (pre-existing)",
+    "prefers-reduced-motion for WatercolorPlant not verified (pre-existing)",
+    "Nav text color scroll transition only verifiable visually — no unit test can assert runtime scroll-driven color interpolation"
+  ],
+  "env_vars_required": [
+    { "name": "NEXT_PUBLIC_SANITY_PROJECT_ID", "scope": "public", "new": false },
+    { "name": "NEXT_PUBLIC_SANITY_DATASET", "scope": "public", "new": false },
+    { "name": "NEXT_PUBLIC_SITE_URL", "scope": "public", "new": false },
+    { "name": "SANITY_API_READ_TOKEN", "scope": "server", "new": false },
+    { "name": "REVALIDATE_SECRET", "scope": "server", "new": false }
+  ],
+  "blockers": [],
+  "concerns": ["WatercolorPlant SVG filter performance on Safari remains a pre-existing issue"]
+}

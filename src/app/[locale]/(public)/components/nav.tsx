@@ -32,8 +32,16 @@ export function Nav({ mobileMenuOpen, setMobileMenuOpen, scrollProgress, hamburg
     [1, 0, 0, 1],
   );
 
-  const navBlur = useTransform(scrollProgress ?? STATIC_ONE, [0.04, 0.16, 0.6, 0.68], [0, 4, 4, 0]);
-  const navFilter = useMotionTemplate`blur(${navBlur}px)`;
+  const textColor = useTransform(
+    scrollProgress ?? STATIC_ONE,
+    [0.25, 0.6],
+    ["rgba(255,255,255,0.95)", "rgba(26,26,26,0.95)"],
+  );
+
+  const textShadowOpacity = useTransform(scrollProgress ?? STATIC_ONE, [0.25, 0.6], [1, 0]);
+
+  const textShadow = useMotionTemplate`0 1px 3px rgba(0,0,0,${textShadowOpacity})`;
+  const textShadowLight = useMotionTemplate`0 1px 2px rgba(0,0,0,${textShadowOpacity})`;
 
   const [interactive, setInteractive] = useState(true);
   const [visible, setVisible] = useState(true);
@@ -66,7 +74,6 @@ export function Nav({ mobileMenuOpen, setMobileMenuOpen, scrollProgress, hamburg
         boxShadow:
           "inset 0 1px 1px 0 rgba(255,255,255,0.4), inset 0 -1px 2px 0 rgba(255,255,255,0.1), 0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08)",
         opacity: navOpacity,
-        filter: navFilter,
         pointerEvents: interactive ? "auto" : "none",
         visibility: visible ? "visible" : "hidden",
       }}
@@ -85,49 +92,53 @@ export function Nav({ mobileMenuOpen, setMobileMenuOpen, scrollProgress, hamburg
         }}
       />
 
-      <div
-        className="cursor-pointer font-serif text-2xl font-black tracking-tight text-white transition-colors hover:text-[#12271d]"
-        style={{ textShadow: "0 1px 3px rgba(0,0,0,0.3)" }}
+      <motion.a
+        href="#"
+        className="cursor-pointer font-serif text-2xl font-black tracking-tight transition-colors focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
+        style={{ color: textColor, textShadow }}
       >
         RCD.
-      </div>
+      </motion.a>
 
-      <div
-        className="hidden items-center gap-10 text-xs font-medium tracking-[0.1em] text-white/90 uppercase md:flex"
-        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.2)" }}
+      <motion.div
+        className="hidden items-center gap-10 text-xs font-medium tracking-[0.1em] uppercase md:flex"
+        style={{ color: textColor, textShadow: textShadowLight }}
       >
         <a
           href="#articles"
-          className="rounded-sm transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
+          className="flex min-h-[44px] items-center rounded-sm transition-colors hover:opacity-80 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
         >
           {t("articles")}
         </a>
         <a
           href="#contact"
-          className="rounded-sm transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
+          className="flex min-h-[44px] items-center rounded-sm transition-colors hover:opacity-80 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
         >
           {t("contact")}
         </a>
         <button
           onClick={handleLanguageSwitch}
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm font-bold transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm font-bold transition-colors hover:opacity-80 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent focus-visible:outline-none"
           aria-label={t("switchLanguage")}
         >
           {locale.toUpperCase()}
         </button>
-      </div>
+      </motion.div>
 
-      <div className="flex items-center gap-2 md:hidden">
+      <motion.div
+        className="flex items-center gap-2 md:hidden"
+        style={{ color: textColor, textShadow: textShadowLight }}
+      >
         <button
           onClick={handleLanguageSwitch}
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm text-xs font-bold tracking-[0.1em] text-white uppercase focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm text-xs font-bold tracking-[0.1em] uppercase focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
           aria-label={t("switchLanguage")}
         >
           {locale.toUpperCase()}
         </button>
         <button
           ref={hamburgerRef}
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm text-white focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-expanded={mobileMenuOpen}
           aria-label={mobileMenuOpen ? t("closeMenu") : t("openMenu")}
@@ -147,7 +158,7 @@ export function Nav({ mobileMenuOpen, setMobileMenuOpen, scrollProgress, hamburg
             />
           </svg>
         </button>
-      </div>
+      </motion.div>
     </motion.nav>
   );
 }

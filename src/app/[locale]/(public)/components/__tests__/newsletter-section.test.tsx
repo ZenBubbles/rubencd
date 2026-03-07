@@ -8,60 +8,120 @@ vi.mock("../watercolor-plant", () => ({
   WatercolorPlant: () => <div data-testid="watercolor-plant-mock" />,
 }));
 
-describe("NewsletterSection", () => {
-  it("renders the heading", () => {
+describe("NewsletterSection (Contact Form)", () => {
+  it("renders the section heading", () => {
     render(<NewsletterSection />);
-    expect(screen.getByText("Subscribe to the newsletter")).toBeInTheDocument();
+    const heading = screen.getByRole("heading", { name: /let.*conversation|get in touch/i });
+    expect(heading).toBeInTheDocument();
   });
 
-  it("email input has aria-label", () => {
+  it("renders name input with accessible label", () => {
     render(<NewsletterSection />);
-    expect(screen.getByLabelText("Email address")).toBeInTheDocument();
+    // Look for a name input by label text or aria-label
+    const nameInput = screen.queryByLabelText(/name/i) ?? screen.queryByPlaceholderText(/name/i);
+    expect(nameInput).not.toBeNull();
+    expect(nameInput!.tagName).toBe("INPUT");
   });
 
-  it("shows error when submitting with empty email", async () => {
+  it("renders email input with accessible label", () => {
+    render(<NewsletterSection />);
+    const emailInput = screen.queryByLabelText(/email/i) ?? screen.queryByPlaceholderText(/email/i);
+    expect(emailInput).not.toBeNull();
+    expect(emailInput!.tagName).toBe("INPUT");
+  });
+
+  it("renders a message textarea", () => {
+    render(<NewsletterSection />);
+    const textarea = document.querySelector("textarea");
+    expect(textarea).not.toBeNull();
+  });
+
+  it("renders a submit button", () => {
+    render(<NewsletterSection />);
+    const submitButton = screen.getByRole("button", { name: /submit|send|subscribe|contact/i });
+    expect(submitButton).toBeInTheDocument();
+  });
+
+  it("shows success message after valid submission", async () => {
     const user = userEvent.setup();
     render(<NewsletterSection />);
 
-    await user.click(screen.getByRole("button", { name: /subscribe/i }));
-    expect(screen.getByText("Please enter a valid email address.")).toBeInTheDocument();
+    // Fill in name field
+    const nameInput = screen.queryByLabelText(/name/i) ?? screen.queryByPlaceholderText(/name/i);
+    expect(nameInput).not.toBeNull();
+    await user.type(nameInput!, "Test User");
+
+    // Fill in email field
+    const emailInput = screen.queryByLabelText(/email/i) ?? screen.queryByPlaceholderText(/email/i);
+    expect(emailInput).not.toBeNull();
+    await user.type(emailInput!, "test@example.com");
+
+    // Submit
+    const submitButton = screen.getByRole("button", { name: /submit|send|subscribe|contact/i });
+    await user.click(submitButton);
+
+    // Should show success feedback (translation key or English text)
+    const successEl =
+      screen.queryByText(/thank you/i) ??
+      screen.queryByText(/success/i) ??
+      screen.queryByText(/sent/i) ??
+      screen.queryByText(/received/i);
+    expect(successEl).not.toBeNull();
+  });
+
+  it("shows error when submitting with empty name", async () => {
+    const user = userEvent.setup();
+    render(<NewsletterSection />);
+
+    const emailInput = screen.queryByLabelText(/email/i) ?? screen.queryByPlaceholderText(/email/i);
+    await user.type(emailInput!, "test@example.com");
+
+    const submitButton = screen.getByRole("button", { name: /send/i });
+    await user.click(submitButton);
+
+    expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
   });
 
   it("shows error when submitting with invalid email", async () => {
     const user = userEvent.setup();
     render(<NewsletterSection />);
 
-    await user.type(screen.getByLabelText("Email address"), "not-an-email");
-    await user.click(screen.getByRole("button", { name: /subscribe/i }));
+    const nameInput = screen.queryByLabelText(/name/i) ?? screen.queryByPlaceholderText(/name/i);
+    await user.type(nameInput!, "Test User");
+
+    const emailInput = screen.queryByLabelText(/email/i) ?? screen.queryByPlaceholderText(/email/i);
+    await user.type(emailInput!, "not-an-email");
+
+    const submitButton = screen.getByRole("button", { name: /send/i });
+    await user.click(submitButton);
+
     expect(screen.getByText("Please enter a valid email address.")).toBeInTheDocument();
   });
 
-  it("shows success message on valid email submit", async () => {
+  it("clears error when user types in the errored field", async () => {
     const user = userEvent.setup();
     render(<NewsletterSection />);
 
-    await user.type(screen.getByLabelText("Email address"), "test@example.com");
-    await user.click(screen.getByRole("button", { name: /subscribe/i }));
-    expect(screen.getByText(/Thank you for subscribing/)).toBeInTheDocument();
+    // Trigger name validation error
+    const submitButton = screen.getByRole("button", { name: /send/i });
+    await user.click(submitButton);
+    expect(screen.getByText("Please enter your name.")).toBeInTheDocument();
+
+    // Type in the name field — error should clear
+    const nameInput = screen.queryByLabelText(/name/i) ?? screen.queryByPlaceholderText(/name/i);
+    await user.type(nameInput!, "R");
+    expect(screen.queryByText("Please enter your name.")).toBeNull();
   });
 
   it("footer contains 'Damsgaard' spelled correctly (with S)", () => {
     render(<NewsletterSection />);
-    const footer = document.querySelector("footer")!;
+    const footer = screen.getByRole("contentinfo");
     expect(footer.textContent).toContain("Damsgaard");
     expect(footer.textContent).not.toContain("Damgaard");
   });
 
-  it("clears error when user starts typing", async () => {
-    const user = userEvent.setup();
+  it("has the watercolor plant background", () => {
     render(<NewsletterSection />);
-
-    // Trigger error
-    await user.click(screen.getByRole("button", { name: /subscribe/i }));
-    expect(screen.getByText("Please enter a valid email address.")).toBeInTheDocument();
-
-    // Start typing — error should clear
-    await user.type(screen.getByLabelText("Email address"), "a");
-    expect(screen.queryByText("Please enter a valid email address.")).not.toBeInTheDocument();
+    expect(screen.getByTestId("watercolor-plant-mock")).toBeInTheDocument();
   });
 });

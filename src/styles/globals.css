@@ -16,6 +16,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    scrollbar-color: rgba(30, 30, 30, 0.25) transparent;
+    scrollbar-width: thin;
   }
 
   body {
@@ -36,15 +39,27 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #fafaf8;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #e5e5e5;
+    background: rgba(30, 30, 30, 0.25);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #12271d;
+    background: rgba(30, 30, 30, 0.5);
+  }
+
+  [data-hero-name] {
+    opacity: 0.9;
+    mix-blend-mode: multiply;
+  }
+
+  @media (min-width: 768px) {
+    [data-hero-name] {
+      opacity: 1;
+      mix-blend-mode: normal;
+    }
   }
 }

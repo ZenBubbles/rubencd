@@ -97,7 +97,7 @@ describe("Hero", () => {
     const hiddenImage = Array.from(heroImages).find(
       (img) => img.getAttribute("aria-hidden") === "true",
     );
-    expect(hiddenImage).toBeDefined();
+    expect(hiddenImage).not.toBeNull();
   });
 
   it("calls onScrollProgress callback with scrollYProgress", () => {
@@ -114,7 +114,7 @@ describe("Hero", () => {
       return style.pointerEvents === "none" && style.background?.includes("linear-gradient");
     });
     // Left vignette, right vignette, top vignette, bottom gradient = 4 gradient overlays
-    expect(gradientDivs.length).toBeGreaterThanOrEqual(4);
+    expect(gradientDivs.length).toBe(4);
   });
 
   it("has grain overlay with noise texture", () => {
@@ -124,7 +124,7 @@ describe("Hero", () => {
       const style = (el as HTMLElement).style;
       return style.backgroundImage?.includes("feTurbulence");
     });
-    expect(grainDiv).toBeDefined();
+    expect(grainDiv).not.toBeNull();
   });
 
   it("aria-label spells 'Damsgaard' correctly (with S)", () => {
@@ -143,5 +143,34 @@ describe("Hero", () => {
     expect(() => render(<Hero />)).not.toThrow();
     const h1 = screen.getByRole("heading", { level: 1 });
     expect(h1).toBeInTheDocument();
+  });
+
+  it("sticky container does not use 100vw (prevents horizontal scroll)", () => {
+    const { container } = render(<Hero />);
+    const sticky = container.querySelector(".sticky") as HTMLElement;
+    expect(sticky.style.width).toBe("100%");
+  });
+
+  it("renders hero image with responsive object positioning", () => {
+    const { container } = render(<Hero />);
+    const img = container.querySelector('img[src="/images/hero.png"]') as HTMLElement;
+    expect(img.className).toContain("object-cover");
+    expect(img.className).toContain("object-top");
+  });
+
+  it("left image half has correct clipPath", () => {
+    const { container } = render(<Hero />);
+    const leftHalf = Array.from(container.querySelectorAll('[style*="clip-path"]')).find(
+      (el) => (el as HTMLElement).style.clipPath === "inset(0 50% 0 0)",
+    );
+    expect(leftHalf).toBeTruthy();
+  });
+
+  it("right image half has correct clipPath", () => {
+    const { container } = render(<Hero />);
+    const rightHalf = Array.from(container.querySelectorAll('[style*="clip-path"]')).find(
+      (el) => (el as HTMLElement).style.clipPath === "inset(0 0 0 50%)",
+    );
+    expect(rightHalf).toBeTruthy();
   });
 });

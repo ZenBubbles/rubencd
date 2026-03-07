@@ -32,14 +32,19 @@
     }
   },
   "newsletter": {
-    "title": "Abonner på nyhetsbrevet",
-    "description": "Få de nyeste artiklene og designressursene rett i innboksen din hver uke.",
-    "privacyNote": "Vi respekterer personvernet ditt og innboks null.",
-    "placeholder": "epost@eksempel.no",
+    "title": "La oss starte en samtale",
+    "description": "Har du en idé, et spørsmål, eller bare lyst til å ta kontakt? Jeg vil gjerne høre fra deg.",
+    "placeholder": "din@epost.no",
     "subscribe": "Abonner",
-    "success": "Takk for at du abonnerer! Du hører fra oss snart.",
+    "success": "Takk for at du tok kontakt! Jeg svarer deg så snart som mulig.",
     "errorInvalid": "Vennligst skriv inn en gyldig e-postadresse.",
-    "emailLabel": "E-postadresse"
+    "errorName": "Vennligst skriv inn navnet ditt.",
+    "emailLabel": "E-post",
+    "nameLabel": "Navn",
+    "namePlaceholder": "Ditt navn",
+    "messageLabel": "Melding",
+    "messagePlaceholder": "Hva tenker du på?",
+    "submit": "Send melding"
   },
   "footer": {
     "copyright": "2026 Ruben Christoffer Damsgaard."

@@ -4,14 +4,32 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { WatercolorPlant } from "./watercolor-plant";
 
+const liquidGlassStyle = {
+  background: "rgba(255, 255, 255, 0.15)",
+  backdropFilter: "blur(16px) saturate(180%)",
+  WebkitBackdropFilter: "blur(16px) saturate(180%)",
+  border: "1px solid rgba(255, 255, 255, 0.3)",
+  boxShadow:
+    "0 8px 32px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 4px 20px rgba(255, 255, 255, 0.15)",
+} as const;
+
+const inputClassName =
+  "w-full rounded-2xl px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#999] transition-shadow outline-none focus-visible:ring-2 focus-visible:ring-[#12271d]/30 focus-visible:ring-offset-1";
+
 export function NewsletterSection() {
   const t = useTranslations("newsletter");
   const tFooter = useTranslations("footer");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   function handleSubmit() {
+    if (!name.trim()) {
+      setError(t("errorName"));
+      return;
+    }
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setError(t("errorInvalid"));
       return;
@@ -40,50 +58,87 @@ export function NewsletterSection() {
         <WatercolorPlant />
       </div>
 
-      <div className="pt-40" />
+      <div className="pt-16" />
 
       <div className="relative z-10 mx-auto max-w-2xl text-center">
         <h2 className="mb-4 font-serif text-3xl font-medium text-[#1a1a1a]">{t("title")}</h2>
-        <p className="mb-8 leading-relaxed font-light text-[#525252]">
-          {t("description")}
-          <br />
-          {t("privacyNote")}
-        </p>
+        <p className="mb-8 leading-relaxed font-light text-[#525252]">{t("description")}</p>
 
         {submitted ? (
-          <div className="border border-[#12271d] bg-white px-6 py-4 text-sm font-medium text-[#12271d]">
-            {t("success")}
-          </div>
+          <div className="py-6 text-sm font-medium text-[#12271d]">{t("success")}</div>
         ) : (
-          <>
-            <form
-              className="flex flex-col gap-0 shadow-sm sm:flex-row"
-              noValidate
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit();
+          <form
+            className="flex flex-col gap-4"
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            {/* Name input */}
+            <input
+              type="text"
+              placeholder={t("namePlaceholder")}
+              aria-label={t("nameLabel")}
+              aria-invalid={error ? true : undefined}
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                setError("");
+              }}
+              className={inputClassName}
+              style={liquidGlassStyle}
+            />
+
+            {/* Email input */}
+            <input
+              type="email"
+              placeholder={t("placeholder")}
+              aria-label={t("emailLabel")}
+              aria-invalid={error ? true : undefined}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError("");
+              }}
+              className={inputClassName}
+              style={liquidGlassStyle}
+            />
+
+            {/* Message textarea */}
+            <textarea
+              placeholder={t("messagePlaceholder")}
+              aria-label={t("messageLabel")}
+              rows={4}
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+              }}
+              className={inputClassName + " resize-none"}
+              style={liquidGlassStyle}
+            />
+
+            {error && (
+              <p role="alert" className="text-left text-xs text-[#12271d]">
+                {error}
+              </p>
+            )}
+
+            {/* Liquid glass dark submit button */}
+            <button
+              type="submit"
+              className="mt-2 w-full cursor-pointer rounded-xl px-8 py-3 text-xs font-bold tracking-widest text-white uppercase transition-all outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+              style={{
+                background: "linear-gradient(135deg, rgba(20,20,20,0.6), rgba(40,40,40,0.4))",
+                backdropFilter: "blur(40px) saturate(150%)",
+                WebkitBackdropFilter: "blur(40px) saturate(150%)",
+                border: "1px solid rgba(255,255,255,0.18)",
+                boxShadow: "inset 0 1px 1px 0 rgba(255,255,255,0.25), 0 4px 16px rgba(0,0,0,0.18)",
               }}
             >
-              <input
-                type="email"
-                placeholder={t("placeholder")}
-                aria-label={t("emailLabel")}
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setError("");
-                }}
-                className="flex-grow rounded-none border border-gray-200 bg-white px-6 py-4 font-sans text-[#1a1a1a] placeholder-gray-400 transition-colors outline-none focus:border-[#12271d] focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="border border-[#1a1a1a] bg-[#1a1a1a] px-8 py-4 text-xs font-bold tracking-widest text-white uppercase transition-colors hover:border-[#12271d] hover:bg-[#12271d] focus-visible:ring-2 focus-visible:ring-[#12271d] focus-visible:ring-offset-2 focus-visible:outline-none"
-              >
-                {t("subscribe")}
-              </button>
-            </form>
-            {error && <p className="mt-2 text-left text-xs text-[#12271d]">{error}</p>}
-          </>
+              {t("submit")}
+            </button>
+          </form>
         )}
       </div>
 

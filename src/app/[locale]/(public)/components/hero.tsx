@@ -2,14 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useEffect } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionTemplate,
-  useReducedMotion,
-  type MotionValue,
-} from "motion/react";
+import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
 
 interface AnimatedNameProps {
@@ -61,11 +54,11 @@ export function Hero({ onScrollProgress }: HeroProps) {
     onScrollProgress?.(scrollYProgress);
   }, [scrollYProgress, onScrollProgress]);
 
-  // Container zoom: starts at 70% and grows to fill viewport (0% → 35%)
+  // Container zoom: starts at 90% and grows to fill viewport (0% → 35%)
   const containerScale = useTransform(
     scrollYProgress,
     [0, 0.35],
-    prefersReducedMotion ? [1, 1] : [0.7, 1.0],
+    prefersReducedMotion ? [1, 1] : [0.9, 1.0],
   );
 
   // Name fadeout (0% → 12%)
@@ -75,8 +68,6 @@ export function Hero({ onScrollProgress }: HeroProps) {
     prefersReducedMotion ? [1, 1] : [1, 0],
   );
   const nameY = useTransform(scrollYProgress, [0, 0.12], prefersReducedMotion ? [0, 0] : [0, -60]);
-  const nameBlur = useTransform(scrollYProgress, [0, 0.12], prefersReducedMotion ? [0, 0] : [0, 6]);
-  const nameFilter = useMotionTemplate`blur(${nameBlur}px)`;
 
   // Overlays
   const bottomGradientOpacity = useTransform(scrollYProgress, [0.08, 0.25], [1, 0]);
@@ -95,22 +86,22 @@ export function Hero({ onScrollProgress }: HeroProps) {
   // Split (35% → 65%)
   const leftX = useTransform(
     scrollYProgress,
-    [0.35, 0.65],
+    [0.25, 0.75],
     prefersReducedMotion ? ["0%", "0%"] : ["0%", "-105%"],
   );
   const rightX = useTransform(
     scrollYProgress,
-    [0.35, 0.65],
+    [0.25, 0.75],
     prefersReducedMotion ? ["0%", "0%"] : ["0%", "105%"],
   );
   const splitShadowOpacity = useTransform(
     scrollYProgress,
-    [0.37, 0.48, 0.58],
+    [0.3, 0.45, 0.65],
     prefersReducedMotion ? [0, 0, 0] : [0, 1, 0],
   );
 
   // Background transition: dark → light during split
-  const bgColor = useTransform(scrollYProgress, [0.35, 0.55], ["#111111", "#FAFAF8"]);
+  const bgColor = useTransform(scrollYProgress, [0.25, 0.6], ["#111111", "#FAFAF8"]);
 
   return (
     <div ref={wrapperRef} style={{ height: "500vh", position: "relative" }}>
@@ -118,18 +109,18 @@ export function Hero({ onScrollProgress }: HeroProps) {
         className="sticky top-0 h-dvh overflow-hidden"
         style={{
           backgroundColor: bgColor,
-          width: "100vw",
+          width: "100%",
           margin: 0,
           padding: 0,
         }}
       >
-        {/* Image container — scales from 0.7 to 1.0 */}
+        {/* Image container — scales from 0.9 to 1.0 */}
         <motion.div
           style={{
             position: "absolute",
             inset: 0,
             scale: containerScale,
-            transformOrigin: "center 20%",
+            transformOrigin: "center center",
             willChange: "transform",
           }}
         >
@@ -140,7 +131,6 @@ export function Hero({ onScrollProgress }: HeroProps) {
               inset: 0,
               clipPath: "inset(0 50% 0 0)",
               x: leftX,
-              willChange: "transform",
               zIndex: 10,
             }}
           >
@@ -150,9 +140,8 @@ export function Hero({ onScrollProgress }: HeroProps) {
               fill
               priority
               sizes="100vw"
+              className="object-cover object-top md:object-contain md:object-bottom"
               style={{
-                objectFit: "cover",
-                objectPosition: "center 20%",
                 filter: "brightness(0.95) contrast(1.05)",
               }}
             />
@@ -174,7 +163,6 @@ export function Hero({ onScrollProgress }: HeroProps) {
               inset: 0,
               clipPath: "inset(0 0 0 50%)",
               x: rightX,
-              willChange: "transform",
               zIndex: 10,
             }}
           >
@@ -184,9 +172,8 @@ export function Hero({ onScrollProgress }: HeroProps) {
               fill
               sizes="100vw"
               aria-hidden="true"
+              className="object-cover object-top md:object-contain md:object-bottom"
               style={{
-                objectFit: "cover",
-                objectPosition: "center 20%",
                 filter: "brightness(0.95) contrast(1.05)",
               }}
             />
@@ -297,10 +284,10 @@ export function Hero({ onScrollProgress }: HeroProps) {
             width: "100%",
             opacity: nameOpacity,
             y: nameY,
-            filter: nameFilter,
           }}
         >
           <h1
+            data-hero-name
             style={{
               display: "flex",
               flexDirection: "column",
@@ -309,8 +296,6 @@ export function Hero({ onScrollProgress }: HeroProps) {
               width: "100%",
               lineHeight: "0.85",
               textAlign: "center",
-              opacity: 0.9,
-              mixBlendMode: "multiply",
             }}
             aria-label={t("ariaLabel")}
           >

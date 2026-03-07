@@ -32,14 +32,19 @@
     }
   },
   "newsletter": {
-    "title": "Subscribe to the newsletter",
-    "description": "Get the latest articles and design resources sent to your inbox weekly.",
-    "privacyNote": "We respect your privacy and inbox zero.",
-    "placeholder": "email@example.com",
+    "title": "Let's Start a Conversation",
+    "description": "Have an idea, a question, or just want to connect? I'd love to hear from you.",
+    "placeholder": "your@email.com",
     "subscribe": "Subscribe",
-    "success": "Thank you for subscribing! You'll hear from us soon.",
+    "success": "Thank you for reaching out! I'll get back to you soon.",
     "errorInvalid": "Please enter a valid email address.",
-    "emailLabel": "Email address"
+    "errorName": "Please enter your name.",
+    "emailLabel": "Email",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "messageLabel": "Message",
+    "messagePlaceholder": "What's on your mind?",
+    "submit": "Send Message"
   },
   "footer": {
     "copyright": "2026 Ruben Christoffer Damsgaard."
