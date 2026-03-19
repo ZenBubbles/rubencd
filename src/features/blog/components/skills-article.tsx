@@ -216,12 +216,14 @@ export function SkillsArticle() {
                 type of work. Not a prompt. Not a template. A thinking framework.
               </p>
               <p>
-                Here is the difference. A prompt says: &ldquo;Write me a blog post about AI. Make it
-                engaging.&rdquo; A skill says: &ldquo;Every blog post revolves around one big idea.
-                Open with a hook that reframes the topic. Cut every sentence that does not serve the
-                core argument. Never use the words &lsquo;delve,&rsquo; &lsquo;utilize,&rsquo; or
-                &lsquo;it is worth noting.&rsquo; Read the draft out loud before delivering. If it
-                does not flow, rewrite it.&rdquo;
+                Here is the difference. A prompt says: &ldquo;Write an apology email to a customer
+                who had a bad experience.&rdquo; A skill says: &ldquo;Lead with the specific thing
+                that went wrong, not a vague &lsquo;sorry for the inconvenience.&rsquo; Show them
+                you understand what happened. Be warm, be human, but do not pad it with filler. Say
+                what you are doing to fix it. Say what changes so it does not happen again. Keep it
+                under 150 words. If the email could have been sent by any company about any problem,
+                it is too generic. Rewrite it until it sounds like a real person who actually
+                cares.&rdquo;
               </p>
               <p>
                 A prompt is a one-time direction. A skill is expertise you install once and use
