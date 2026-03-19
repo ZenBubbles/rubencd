@@ -4,6 +4,7 @@ export { PostBody } from "./components/post-body";
 export { CategoryTabs } from "./components/category-tabs";
 export { SkillsArticle } from "./components/skills-article";
 export { ArticleAuthor } from "./components/article-author";
+export { ArticleLayout } from "./components/article-layout";
 export { getPosts } from "./queries/get-posts";
 export { getPost, getPostSlugs } from "./queries/get-post";
 export type { PostCardData, CategoryData } from "./types";

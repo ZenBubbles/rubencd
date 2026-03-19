@@ -100,8 +100,26 @@ export function Hero({ onScrollProgress }: HeroProps) {
     prefersReducedMotion ? [0, 0, 0] : [0, 1, 0],
   );
 
-  // Background transition: dark → light during split
-  const bgColor = useTransform(scrollYProgress, [0.25, 0.6], ["#111111", "#FAFAF8"]);
+  // Reveal illustration: visible during split, fades out as hero unpins
+  const illustrationOpacity = useTransform(
+    scrollYProgress,
+    [0.25, 0.35, 0.85, 1.0],
+    prefersReducedMotion ? [0, 0, 0, 0] : [0, 1, 1, 0],
+  );
+
+  // Bottom gradient that melts the illustration into the white section
+  const bottomFadeOpacity = useTransform(
+    scrollYProgress,
+    [0.85, 1.0],
+    prefersReducedMotion ? [0, 0] : [0, 1],
+  );
+
+  // Background stays dark while illustration is visible, then transitions to light
+  const bgColor = useTransform(
+    scrollYProgress,
+    [0.25, 0.85, 1.0],
+    ["#111111", "#111111", "#FAFAF8"],
+  );
 
   return (
     <div ref={wrapperRef} style={{ height: "500vh", position: "relative" }}>
@@ -124,6 +142,50 @@ export function Hero({ onScrollProgress }: HeroProps) {
             willChange: "transform",
           }}
         >
+          {/* Reveal illustration — stationary behind the split halves */}
+          <motion.div
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 5,
+              opacity: illustrationOpacity,
+              willChange: "opacity",
+            }}
+          >
+            {/* Desktop image */}
+            <Image
+              src="/images/kjerringvik-grafisk.webp"
+              alt=""
+              fill
+              sizes="100vw"
+              aria-hidden="true"
+              className="hidden object-cover object-center md:block"
+            />
+            {/* Mobile image (portrait aspect ratio) */}
+            <Image
+              src="/images/kjerringvik-grafisk-mob.webp"
+              alt=""
+              fill
+              sizes="100vw"
+              aria-hidden="true"
+              className="object-cover object-center md:hidden"
+            />
+            {/* Bottom fade — melts image into white */}
+            <motion.div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "50%",
+                background: "linear-gradient(to top, #FAFAF8 0%, transparent 100%)",
+                opacity: bottomFadeOpacity,
+                zIndex: 1,
+                pointerEvents: "none",
+              }}
+            />
+          </motion.div>
+
           {/* Left image half */}
           <motion.div
             style={{

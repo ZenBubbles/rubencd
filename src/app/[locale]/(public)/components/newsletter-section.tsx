@@ -5,12 +5,12 @@ import { useTranslations } from "next-intl";
 import { WatercolorPlant } from "./watercolor-plant";
 
 const liquidGlassStyle = {
-  background: "rgba(255, 255, 255, 0.15)",
-  backdropFilter: "blur(16px) saturate(180%)",
-  WebkitBackdropFilter: "blur(16px) saturate(180%)",
-  border: "1px solid rgba(255, 255, 255, 0.3)",
+  background: "rgba(255, 255, 255, 0.06)",
+  backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+  WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+  border: "1px solid rgba(255, 255, 255, 0.25)",
   boxShadow:
-    "0 8px 32px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 4px 20px rgba(255, 255, 255, 0.15)",
+    "0 8px 32px rgba(18, 39, 29, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 4px 20px rgba(255, 255, 255, 0.1)",
 } as const;
 
 const inputClassName =
@@ -124,16 +124,13 @@ export function NewsletterSection() {
               </p>
             )}
 
-            {/* Liquid glass dark submit button */}
+            {/* Solid accent submit button */}
             <button
               type="submit"
-              className="mt-2 w-full cursor-pointer rounded-xl px-8 py-3 text-xs font-bold tracking-widest text-white uppercase transition-all outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+              className="mt-2 w-full cursor-pointer rounded-xl px-8 py-3 text-xs font-bold tracking-widest text-white uppercase transition-all outline-none hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[#12271d]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
               style={{
-                background: "linear-gradient(135deg, rgba(20,20,20,0.6), rgba(40,40,40,0.4))",
-                backdropFilter: "blur(40px) saturate(150%)",
-                WebkitBackdropFilter: "blur(40px) saturate(150%)",
-                border: "1px solid rgba(255,255,255,0.18)",
-                boxShadow: "inset 0 1px 1px 0 rgba(255,255,255,0.25), 0 4px 16px rgba(0,0,0,0.18)",
+                background: "#12271d",
+                boxShadow: "0 2px 12px rgba(18,39,29,0.18)",
               }}
             >
               {t("submit")}

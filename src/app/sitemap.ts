@@ -28,46 +28,50 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteUrl}/nb${path}`,
       lastModified: new Date(),
       changeFrequency: path === "" ? "weekly" : "monthly",
-      priority: priority - 0.1,
+      priority: Math.round((priority - 0.1) * 10) / 10,
+    },
+  ]);
+
+  // Static article pages (hardcoded routes that are NOT in Sanity)
+  const staticArticleSlugs = ["is-software-and-saas-dying", "claude-skills"];
+
+  const staticArticles: MetadataRoute.Sitemap = staticArticleSlugs.flatMap((slug) => [
+    {
+      url: `${siteUrl}/en/blog/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/nb/blog/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     },
   ]);
 
   let postEntries: MetadataRoute.Sitemap = [];
   try {
     const { data: posts } = await sanityFetch({ query: sitemapPostsQuery });
-    postEntries = (posts ?? []).flatMap((post: { slug: string; _updatedAt: string }) => [
-      {
-        url: `${siteUrl}/en/blog/${post.slug}`,
-        lastModified: new Date(post._updatedAt),
-        changeFrequency: "monthly" as const,
-        priority: 0.7,
-      },
-      {
-        url: `${siteUrl}/nb/blog/${post.slug}`,
-        lastModified: new Date(post._updatedAt),
-        changeFrequency: "monthly" as const,
-        priority: 0.6,
-      },
-    ]);
+    postEntries = (posts ?? [])
+      .filter((post: { slug: string }) => !staticArticleSlugs.includes(post.slug))
+      .flatMap((post: { slug: string; _updatedAt: string }) => [
+        {
+          url: `${siteUrl}/en/blog/${post.slug}`,
+          lastModified: new Date(post._updatedAt),
+          changeFrequency: "monthly" as const,
+          priority: 0.7,
+        },
+        {
+          url: `${siteUrl}/nb/blog/${post.slug}`,
+          lastModified: new Date(post._updatedAt),
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        },
+      ]);
   } catch {
     // Sanity fetch may fail during build without token — static pages still generated
   }
 
-  // Static article page
-  const staticArticle: MetadataRoute.Sitemap = [
-    {
-      url: `${siteUrl}/en/blog/is-software-and-saas-dying`,
-      lastModified: new Date("2026-03-05"),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/nb/blog/is-software-and-saas-dying`,
-      lastModified: new Date("2026-03-05"),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-  ];
-
-  return [...staticEntries, ...staticArticle, ...postEntries];
+  return [...staticEntries, ...staticArticles, ...postEntries];
 }

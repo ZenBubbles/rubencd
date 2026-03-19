@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/routing";
 
 interface MobileMenuProps {
   open: boolean;
@@ -11,6 +12,8 @@ interface MobileMenuProps {
 
 export function MobileMenu({ open, onClose, triggerRef }: MobileMenuProps) {
   const t = useTranslations("nav");
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -67,8 +70,8 @@ export function MobileMenu({ open, onClose, triggerRef }: MobileMenuProps) {
   if (!open) return null;
 
   const links = [
-    { key: "articles" as const, href: "#articles" },
-    { key: "contact" as const, href: "#contact" },
+    { key: "articles" as const, href: isHome ? "#articles" : "/#articles" },
+    { key: "contact" as const, href: isHome ? "#contact" : "/#contact" },
   ];
 
   return (

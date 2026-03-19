@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArticleAuthor } from "@/features/blog";
+import { ArticleAuthor, ArticleLayout } from "@/features/blog";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -40,7 +40,7 @@ export default async function SoftwareDyingPage({ params }: Props) {
   const t = await getTranslations();
 
   return (
-    <article className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+    <ArticleLayout>
       <header className="mb-12">
         <div className="mb-5 flex items-center gap-3 text-xs font-bold tracking-widest text-[#525252]">
           <span className="text-[#12271d] uppercase">{t("articles.article1.category")}</span>
@@ -62,6 +62,6 @@ export default async function SoftwareDyingPage({ params }: Props) {
           {t("blog.articleComingSoon")}
         </p>
       </div>
-    </article>
+    </ArticleLayout>
   );
 }

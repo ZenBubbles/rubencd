@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { useScrollProgress } from "@/app/[locale]/(public)/components/scroll-context";
 import { ArticleAuthor } from "./article-author";
 import { BeforeAfterToggle } from "./before-after-toggle";
 import { PhoneComparison } from "./phone-comparison";
@@ -98,8 +100,16 @@ function StatBlock({
   );
 }
 
+const DARK_HERO_HEIGHT = 350;
+
 export function SkillsArticle() {
   const prefersReduced = useReducedMotion();
+  const { setDarkHeaderHeight } = useScrollProgress();
+
+  useEffect(() => {
+    setDarkHeaderHeight(DARK_HERO_HEIGHT);
+    return () => setDarkHeaderHeight(0);
+  }, [setDarkHeaderHeight]);
 
   return (
     <>
@@ -107,7 +117,7 @@ export function SkillsArticle() {
 
       <article id="main-content">
         {/* Hero Section — Dark */}
-        <header className="relative overflow-hidden bg-[#0a0a0a] px-6 pt-28 pb-20 md:px-12 md:pt-40 md:pb-28">
+        <header className="relative overflow-hidden bg-[#0a0a0a] px-6 pt-36 pb-20 md:px-12 md:pt-40 md:pb-28">
           <div className="mx-auto max-w-3xl">
             <motion.div
               className="mb-8 flex items-center gap-3 text-xs font-bold tracking-widest"
