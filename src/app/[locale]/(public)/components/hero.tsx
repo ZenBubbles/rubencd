@@ -37,7 +37,7 @@ function AnimatedName({ text, style, startDelay, letterStyle }: AnimatedNameProp
 }
 
 interface HeroProps {
-  onScrollProgress?: (progress: MotionValue<number>) => void;
+  onScrollProgress?: (progress: MotionValue<number> | null) => void;
 }
 
 export function Hero({ onScrollProgress }: HeroProps) {
@@ -52,6 +52,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
 
   useEffect(() => {
     onScrollProgress?.(scrollYProgress);
+    return () => onScrollProgress?.(null);
   }, [scrollYProgress, onScrollProgress]);
 
   // Container zoom: starts at 90% and grows to fill viewport (0% → 35%)

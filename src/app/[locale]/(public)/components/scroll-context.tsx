@@ -5,7 +5,7 @@ import { type MotionValue } from "motion/react";
 
 interface ScrollContextValue {
   scrollProgress: MotionValue<number> | null;
-  setScrollProgress: (progress: MotionValue<number>) => void;
+  setScrollProgress: (progress: MotionValue<number> | null) => void;
   darkHeaderHeight: number;
   setDarkHeaderHeight: (height: number) => void;
 }
@@ -20,7 +20,7 @@ const ScrollContext = createContext<ScrollContextValue>({
 export function ScrollProvider({ children }: { children: React.ReactNode }) {
   const [scrollProgress, setScrollProgressState] = useState<MotionValue<number> | null>(null);
   const [darkHeaderHeight, setDarkHeaderHeightState] = useState(0);
-  const setScrollProgress = useCallback((progress: MotionValue<number>) => {
+  const setScrollProgress = useCallback((progress: MotionValue<number> | null) => {
     setScrollProgressState(progress);
   }, []);
   const setDarkHeaderHeight = useCallback((height: number) => {
