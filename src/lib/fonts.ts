@@ -1,4 +1,4 @@
-import { Anton, Inter, Merriweather, Oswald } from "next/font/google";
+import { Anton, Inter, Newsreader, Oswald } from "next/font/google";
 
 export const anton = Anton({
   weight: "400",
@@ -13,8 +13,8 @@ export const inter = Inter({
   display: "swap",
 });
 
-export const merriweather = Merriweather({
-  weight: ["300", "400", "700", "900"],
+export const newsreader = Newsreader({
+  weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-serif",

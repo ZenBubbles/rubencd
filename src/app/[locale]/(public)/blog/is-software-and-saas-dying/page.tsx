@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ArticleAuthor } from "@/features/blog";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -51,9 +52,10 @@ export default async function SoftwareDyingPage({ params }: Props) {
         <h1 className="mb-6 font-serif text-4xl leading-[1.15] font-medium text-[#1a1a1a] md:text-5xl lg:text-6xl">
           {t("articles.article1.title")}
         </h1>
-        <p className="text-xl leading-relaxed font-light text-[#525252]">
+        <p className="mb-8 text-xl leading-relaxed font-light text-[#525252]">
           {t("blog.articleSubtitle")}
         </p>
+        <ArticleAuthor date={t("articles.article1.date")} />
       </header>
       <div className="border-t border-[#E5E5E5] pt-12">
         <p className="text-lg leading-relaxed font-light text-[#525252]">

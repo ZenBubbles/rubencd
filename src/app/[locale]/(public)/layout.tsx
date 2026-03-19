@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { PublicShell } from "./components/public-shell";
 
 interface Props {
@@ -9,5 +10,10 @@ interface Props {
 export default async function PublicLayout({ children, params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <PublicShell>{children}</PublicShell>;
+  return (
+    <PublicShell>
+      <ScrollToTop />
+      {children}
+    </PublicShell>
+  );
 }

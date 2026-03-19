@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ScrollShell } from "./components/scroll-shell";
 import { BlogSection } from "./components/blog-section";
@@ -14,6 +15,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t("homeTitle"),
     description: t("homeDescription"),
+    keywords: [
+      "Ruben Christoffer Damsgaard",
+      "Ruben Damsgaard",
+      "Ruben CD",
+      "AI Agents",
+      "Machine Learning",
+      "Embedding Models",
+      "UI/UX",
+    ],
     openGraph: {
       title: t("homeTitle"),
       description: t("homeDescription"),
@@ -31,6 +41,53 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+function JsonLd({ locale }: { locale: string }) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rubencd.com";
+
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Ruben Christoffer Damsgaard",
+    alternateName: ["Ruben Damsgaard", "Ruben CD"],
+    url: siteUrl,
+    jobTitle: "AI & Software Engineer",
+    knowsAbout: [
+      "AI Agents",
+      "Machine Learning",
+      "Embedding Models",
+      "UI/UX Design",
+      "Startups",
+      "SaaS",
+    ],
+    sameAs: [],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Ruben Christoffer Damsgaard — Blog",
+    alternateName: "Ruben CD Blog",
+    url: siteUrl,
+    inLanguage: [locale === "nb" ? "nb-NO" : "en-US"],
+    author: { "@type": "Person", name: "Ruben Christoffer Damsgaard" },
+    description:
+      "Writing about AI Agents, Machine Learning, Embedding Models, UI/UX, startups, and design.",
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+    </>
+  );
+}
+
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -38,20 +95,17 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <ScrollShell>
+      <JsonLd locale={locale} />
       <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-12 md:py-24 lg:px-24" id="articles">
         <header className="mb-16 max-w-4xl md:mb-24">
-          <div className="mb-6 flex items-center gap-3">
-            <span className="h-px w-8 bg-[#12271d]" aria-hidden="true" />
-            <span className="text-xs font-bold tracking-[0.2em] text-[#12271d] uppercase">
-              {t("articles.latestWriting")}
-            </span>
-          </div>
-          <h2 className="font-serif text-5xl leading-[1.1] font-light text-[#1a1a1a] md:text-7xl">
+          <h2 className="font-serif text-5xl leading-[1.1] font-light text-[#1a1a1a] italic md:text-7xl">
             {t("articles.heading")} <br />
-            <span className="font-normal italic">{t("articles.headingItalic")}</span>
+            {t("articles.headingItalic")}
           </h2>
         </header>
-        <BlogSection />
+        <Suspense>
+          <BlogSection />
+        </Suspense>
         <NewsletterSection />
       </div>
     </ScrollShell>

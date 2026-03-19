@@ -4,7 +4,7 @@ import type { PostData } from "../types";
 const GET_POST_QUERY = defineQuery(`
   *[_type == "post" && slug.current == $slug][0] {
     _id, title, "slug": slug.current, publishedAt, excerpt, body,
-    mainImage, "categories": categories[]->title,
+    mainImage, "categories": categories[]->{title, "slug": slug.current},
     "estimatedReadingTime": round(length(pt::text(body)) / 5 / 200) + 1
   }
 `);

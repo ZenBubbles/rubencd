@@ -10,7 +10,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "about" });
   return {
-    title: t("title"),
+    title: `${t("title")} — Ruben Christoffer Damsgaard`,
+    description:
+      "Learn about Ruben Christoffer Damsgaard — AI & Software Engineer writing about AI Agents, Machine Learning, Embedding Models, UI/UX, and startups.",
+    keywords: ["Ruben Christoffer Damsgaard", "Ruben Damsgaard", "about", "AI Engineer"],
+    openGraph: {
+      title: `${t("title")} — Ruben Christoffer Damsgaard`,
+      description:
+        "Learn about Ruben Christoffer Damsgaard — AI & Software Engineer writing about AI Agents, Machine Learning, and UI/UX.",
+      type: "profile",
+    },
     alternates: { languages: { en: "/en/about", nb: "/nb/about" } },
   };
 }

@@ -3,7 +3,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { anton, inter, merriweather, oswald } from "@/lib/fonts";
+import { anton, inter, newsreader, oswald } from "@/lib/fonts";
 import "@/styles/globals.css";
 
 interface Props {
@@ -45,7 +45,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${merriweather.variable} ${anton.variable} ${oswald.variable}`}
+      className={`${inter.variable} ${newsreader.variable} ${anton.variable} ${oswald.variable}`}
     >
       <body className="font-sans">
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
