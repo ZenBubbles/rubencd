@@ -35,6 +35,8 @@
   "dependencies": {
     "@portabletext/react": "latest",
     "@portabletext/types": "^4.0.1",
+    "@sanity/client": "^7.20.0",
+    "@sanity/document-internationalization": "^6.0.3",
     "@sanity/image-url": "latest",
     "@sanity/vision": "latest",
     "clsx": "latest",

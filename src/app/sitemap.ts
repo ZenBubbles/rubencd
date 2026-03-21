@@ -54,8 +54,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const { data: posts } = await sanityFetch({ query: sitemapPostsQuery });
     postEntries = (posts ?? [])
-      .filter((post: { slug: string }) => !staticArticleSlugs.includes(post.slug))
-      .flatMap((post: { slug: string; _updatedAt: string }) => [
+      .filter(
+        (post: { slug: string | null }) =>
+          post.slug != null && !staticArticleSlugs.includes(post.slug),
+      )
+      .flatMap((post: { slug: string | null; _updatedAt: string }) => [
         {
           url: `${siteUrl}/en/blog/${post.slug}`,
           lastModified: new Date(post._updatedAt),

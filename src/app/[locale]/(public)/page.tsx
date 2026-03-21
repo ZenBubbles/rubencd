@@ -104,7 +104,7 @@ export default async function HomePage({ params }: Props) {
           </h2>
         </header>
         <Suspense>
-          <BlogSection />
+          <BlogSection locale={locale} />
         </Suspense>
         <NewsletterSection />
       </div>

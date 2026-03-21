@@ -19,9 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-async function BlogContent() {
+async function BlogContent({ locale }: { locale: string }) {
   await connection();
-  const posts = await getPosts();
+  const posts = await getPosts(locale);
   return <CategoryTabs posts={posts} />;
 }
 
@@ -44,7 +44,7 @@ export default async function BlogPage({ params }: Props) {
         </h1>
       </header>
       <Suspense fallback={<div>{t("loading")}</div>}>
-        <BlogContent />
+        <BlogContent locale={locale} />
       </Suspense>
     </section>
   );

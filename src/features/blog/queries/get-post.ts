@@ -1,15 +1,26 @@
 import { defineQuery } from "groq";
 import { fetchSanity } from "@/lib/sanity/client";
 import type { PostData } from "../types";
-const GET_POST_QUERY = defineQuery(`
-  *[_type == "post" && slug.current == $slug][0] {
-    _id, title, "slug": slug.current, publishedAt, excerpt, body,
-    mainImage, "categories": categories[]->{title, "slug": slug.current},
-    "estimatedReadingTime": round(length(pt::text(body)) / 5 / 200) + 1
-  }
+
+export const POST_PROJECTION = `{
+  _id, title, "slug": slug.current, publishedAt, excerpt, body,
+  mainImage, "categories": categories[]->{title, "slug": slug.current},
+  "estimatedReadingTime": round(length(pt::text(body)) / 5 / 200) + 1
+}`;
+
+export const GET_POST_QUERY = defineQuery(`
+  coalesce(
+    *[_type == "post" && slug.current == $slug && language == $locale][0] ${POST_PROJECTION},
+    *[_type == "post" && slug.current == $slug && language == "en"][0] ${POST_PROJECTION},
+    *[_type == "post" && slug.current == $slug && !defined(language)][0] ${POST_PROJECTION}
+  )
 `);
-const GET_POST_SLUGS_QUERY = defineQuery(
-  `*[_type == "post" && defined(slug.current)]{"slug": slug.current}`,
+
+export const GET_POST_SLUGS_QUERY = defineQuery(
+  `*[_type == "post" && defined(slug.current) && (language == "en" || !defined(language))]{"slug": slug.current}`,
 );
-export const getPost = (slug: string) => fetchSanity<PostData | null>(GET_POST_QUERY, { slug });
+
+export const getPost = (slug: string, locale: string) =>
+  fetchSanity<PostData | null>(GET_POST_QUERY, { slug, locale });
+
 export const getPostSlugs = () => fetchSanity<{ slug: string }[]>(GET_POST_SLUGS_QUERY);

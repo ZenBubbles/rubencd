@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params;
   if (slug === "__placeholder__") return {};
   await connection();
-  const post = await getPost(slug);
+  const post = await getPost(slug, locale);
   if (!post) return {};
   const t = await getTranslations({ locale, namespace: "blog" });
   const title = post.title ?? t("title");
@@ -55,10 +55,10 @@ export async function generateStaticParams() {
   }
 }
 
-async function BlogPostContent({ slug }: { slug: string }) {
+async function BlogPostContent({ slug, locale }: { slug: string; locale: string }) {
   const t = await getTranslations("blog");
   await connection();
-  const post = await getPost(slug);
+  const post = await getPost(slug, locale);
   if (!post) notFound();
 
   const imageUrl = post.mainImage?.asset
@@ -114,7 +114,7 @@ export default async function BlogPostPage({ params }: Props) {
   const t = await getTranslations("blog");
   return (
     <Suspense fallback={<div>{t("loading")}</div>}>
-      <BlogPostContent slug={slug} />
+      <BlogPostContent slug={slug} locale={locale} />
     </Suspense>
   );
 }

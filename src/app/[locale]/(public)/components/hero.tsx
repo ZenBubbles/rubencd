@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface AnimatedNameProps {
   text: string;
@@ -49,17 +50,18 @@ export function Hero({ onScrollProgress }: HeroProps) {
   });
 
   const prefersReducedMotion = useReducedMotion();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
     onScrollProgress?.(scrollYProgress);
     return () => onScrollProgress?.(null);
   }, [scrollYProgress, onScrollProgress]);
 
-  // Container zoom: starts at 90% and grows to fill viewport (0% → 35%)
+  // Container zoom: slow cinematic dolly-in toward the face (0% → 30%)
   const containerScale = useTransform(
     scrollYProgress,
-    [0, 0.35],
-    prefersReducedMotion ? [1, 1] : [0.9, 1.0],
+    [0, 0.3],
+    prefersReducedMotion ? [1, 1] : [1.0, 2.5],
   );
 
   // Name fadeout (0% → 12%)
@@ -74,37 +76,37 @@ export function Hero({ onScrollProgress }: HeroProps) {
   const bottomGradientOpacity = useTransform(scrollYProgress, [0.08, 0.25], [1, 0]);
   const vignetteOpacity = useTransform(
     scrollYProgress,
-    [0, 0.45],
+    [0, 0.5],
     prefersReducedMotion ? [1, 1] : [1, 0],
   );
   const vignetteWidth = useTransform(
     scrollYProgress,
-    [0, 0.35],
+    [0, 0.38],
     prefersReducedMotion ? ["40%", "40%"] : ["40%", "50%"],
   );
-  const grainOpacity = useTransform(scrollYProgress, [0.25, 0.45], [0.6, 0]);
+  const grainOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0.6, 0]);
 
-  // Split (35% → 65%)
+  // Split (38% → 80%) — starts after zoom completes with breathing room
   const leftX = useTransform(
     scrollYProgress,
-    [0.25, 0.75],
+    [0.38, 0.8],
     prefersReducedMotion ? ["0%", "0%"] : ["0%", "-105%"],
   );
   const rightX = useTransform(
     scrollYProgress,
-    [0.25, 0.75],
+    [0.38, 0.8],
     prefersReducedMotion ? ["0%", "0%"] : ["0%", "105%"],
   );
   const splitShadowOpacity = useTransform(
     scrollYProgress,
-    [0.3, 0.45, 0.65],
+    [0.42, 0.55, 0.72],
     prefersReducedMotion ? [0, 0, 0] : [0, 1, 0],
   );
 
   // Reveal illustration: visible during split, fades out as hero unpins
   const illustrationOpacity = useTransform(
     scrollYProgress,
-    [0.25, 0.35, 0.85, 1.0],
+    [0.38, 0.48, 0.85, 1.0],
     prefersReducedMotion ? [0, 0, 0, 0] : [0, 1, 1, 0],
   );
 
@@ -118,7 +120,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
   // Background stays dark while illustration is visible, then transitions to light
   const bgColor = useTransform(
     scrollYProgress,
-    [0.25, 0.85, 1.0],
+    [0.38, 0.85, 1.0],
     ["#111111", "#111111", "#FAFAF8"],
   );
 
@@ -133,60 +135,60 @@ export function Hero({ onScrollProgress }: HeroProps) {
           padding: 0,
         }}
       >
-        {/* Image container — scales from 0.9 to 1.0 */}
+        {/* Reveal illustration — independent of zoom, stationary behind the split */}
+        <motion.div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 5,
+            opacity: illustrationOpacity,
+            willChange: "opacity",
+          }}
+        >
+          {/* Desktop image */}
+          <Image
+            src="/images/kjerringvik-grafisk.webp"
+            alt=""
+            fill
+            sizes="100vw"
+            aria-hidden="true"
+            className="hidden object-cover object-center md:block"
+          />
+          {/* Mobile image (portrait aspect ratio) */}
+          <Image
+            src="/images/kjerringvik-grafisk-mob.webp"
+            alt=""
+            fill
+            sizes="100vw"
+            aria-hidden="true"
+            className="object-cover object-center md:hidden"
+          />
+          {/* Bottom fade — melts image into white */}
+          <motion.div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "50%",
+              background: "linear-gradient(to top, #FAFAF8 0%, transparent 100%)",
+              opacity: bottomFadeOpacity,
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          />
+        </motion.div>
+
+        {/* Hero image container — cinematic zoom into face, then splits */}
         <motion.div
           style={{
             position: "absolute",
             inset: 0,
             scale: containerScale,
-            transformOrigin: "center center",
+            transformOrigin: isDesktop ? "center 20%" : "center 18%",
             willChange: "transform",
           }}
         >
-          {/* Reveal illustration — stationary behind the split halves */}
-          <motion.div
-            style={{
-              position: "absolute",
-              inset: 0,
-              zIndex: 5,
-              opacity: illustrationOpacity,
-              willChange: "opacity",
-            }}
-          >
-            {/* Desktop image */}
-            <Image
-              src="/images/kjerringvik-grafisk.webp"
-              alt=""
-              fill
-              sizes="100vw"
-              aria-hidden="true"
-              className="hidden object-cover object-center md:block"
-            />
-            {/* Mobile image (portrait aspect ratio) */}
-            <Image
-              src="/images/kjerringvik-grafisk-mob.webp"
-              alt=""
-              fill
-              sizes="100vw"
-              aria-hidden="true"
-              className="object-cover object-center md:hidden"
-            />
-            {/* Bottom fade — melts image into white */}
-            <motion.div
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "50%",
-                background: "linear-gradient(to top, #FAFAF8 0%, transparent 100%)",
-                opacity: bottomFadeOpacity,
-                zIndex: 1,
-                pointerEvents: "none",
-              }}
-            />
-          </motion.div>
-
           {/* Left image half */}
           <motion.div
             style={{
@@ -195,6 +197,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
               clipPath: "inset(0 50% 0 0)",
               x: leftX,
               zIndex: 10,
+              willChange: "transform",
             }}
           >
             <Image
@@ -227,6 +230,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
               clipPath: "inset(0 0 0 50%)",
               x: rightX,
               zIndex: 10,
+              willChange: "transform",
             }}
           >
             <Image

@@ -37,6 +37,13 @@ export const postSchema = defineType({
       type: "array",
       of: [{ type: "block" }, { type: "image", options: { hotspot: true } }],
     }),
+    defineField({
+      name: "language",
+      title: "Language",
+      type: "string",
+      readOnly: true,
+      hidden: true,
+    }),
   ],
   preview: { select: { title: "title", media: "mainImage" } },
 });

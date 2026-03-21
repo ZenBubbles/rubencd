@@ -10,6 +10,7 @@ export interface PostCardData {
   publishedAt: string;
   excerpt?: string;
   estimatedReadingTime: number;
+  language?: string;
   categories: CategoryData[];
   mainImage?: {
     asset?: { _ref: string };

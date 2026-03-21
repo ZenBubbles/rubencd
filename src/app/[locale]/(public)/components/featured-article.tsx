@@ -6,10 +6,10 @@ import { getPosts } from "@/features/blog";
 import { urlFor } from "@/lib/sanity/image-builder";
 import { formatDate } from "@/lib/utils/format";
 
-export async function FeaturedArticle() {
+export async function FeaturedArticle({ locale }: { locale: string }) {
   const t = await getTranslations("articles");
   await connection();
-  const posts = await getPosts();
+  const posts = await getPosts(locale);
   const featured = posts[0];
 
   if (!featured) {
