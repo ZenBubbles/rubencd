@@ -8,7 +8,7 @@ export async function BlogSection({ locale }: { locale: string }) {
 
   return (
     <>
-      <FeaturedArticle locale={locale} />
+      <FeaturedArticle />
       <section className="mt-8">
         <CategoryTabs posts={posts} />
       </section>

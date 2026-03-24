@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
-import { getPost, getPostSlugs, PostBody } from "@/features/blog";
+import { getPost, getPostSlugs, PostBody, ArticleAuthor } from "@/features/blog";
 import { urlFor } from "@/lib/sanity/image-builder";
 import { formatDate } from "@/lib/utils/format";
 
@@ -81,8 +81,9 @@ async function BlogPostContent({ slug, locale }: { slug: string; locale: string 
           {post.title}
         </h1>
         {post.excerpt && (
-          <p className="text-xl leading-relaxed font-light text-[#525252]">{post.excerpt}</p>
+          <p className="mb-8 text-xl leading-relaxed font-light text-[#525252]">{post.excerpt}</p>
         )}
+        <ArticleAuthor date={formatDate(post.publishedAt)} />
       </header>
 
       {imageUrl && (

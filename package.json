@@ -39,6 +39,7 @@
     "@sanity/document-internationalization": "^6.0.3",
     "@sanity/image-url": "latest",
     "@sanity/vision": "latest",
+    "@tailwindcss/typography": "^0.5.19",
     "clsx": "latest",
     "groq": "latest",
     "gsap": "^3.14.2",

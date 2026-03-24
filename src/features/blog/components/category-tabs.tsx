@@ -14,6 +14,7 @@ interface CategoryTabsProps {
 const CATEGORIES = [
   { slug: "my-views", label: "My Views" },
   { slug: "my-guides", label: "My Guides" },
+  { slug: "builder-notes", label: "Builder Notes" },
 ] as const;
 
 function SkillsCard() {
