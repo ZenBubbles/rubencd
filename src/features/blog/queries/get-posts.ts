@@ -9,7 +9,7 @@ export const GET_POSTS_QUERY = defineQuery(`
   )] | order(publishedAt desc) {
     _id, title, "slug": slug.current, publishedAt, excerpt, language,
     mainImage,
-    "estimatedReadingTime": round(length(pt::text(body)) / 5 / 200) + 1,
+    "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180) + 1,
     "categories": categories[]->{title, "slug": slug.current}
   }
 `);
