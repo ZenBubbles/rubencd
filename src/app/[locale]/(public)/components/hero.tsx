@@ -5,6 +5,7 @@ import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { HeroVideoReveal } from "./hero-video-reveal";
 
 interface AnimatedNameProps {
   text: string;
@@ -135,7 +136,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
           padding: 0,
         }}
       >
-        {/* Reveal illustration — independent of zoom, stationary behind the split */}
+        {/* Reveal layer — video canvas with illustration fallback */}
         <motion.div
           style={{
             position: "absolute",
@@ -145,7 +146,16 @@ export function Hero({ onScrollProgress }: HeroProps) {
             willChange: "opacity",
           }}
         >
-          {/* Desktop image */}
+          {/* Video canvas (renders on top when frames are loaded) */}
+          {!prefersReducedMotion && (
+            <HeroVideoReveal
+              scrollYProgress={scrollYProgress}
+              scrollStart={0.38}
+              scrollEnd={0.85}
+            />
+          )}
+
+          {/* Illustration fallback — visible immediately, hidden by canvas when frames load */}
           <Image
             src="/images/kjerringvik-grafisk.webp"
             alt=""
@@ -154,7 +164,6 @@ export function Hero({ onScrollProgress }: HeroProps) {
             aria-hidden="true"
             className="hidden object-cover object-center md:block"
           />
-          {/* Mobile image (portrait aspect ratio) */}
           <Image
             src="/images/kjerringvik-grafisk-mob.webp"
             alt=""
@@ -163,6 +172,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
             aria-hidden="true"
             className="object-cover object-center md:hidden"
           />
+
           {/* Bottom fade — melts image into white */}
           <motion.div
             style={{

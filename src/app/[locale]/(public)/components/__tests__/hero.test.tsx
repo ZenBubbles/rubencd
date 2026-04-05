@@ -1,6 +1,19 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Hero } from "../hero";
+
+beforeEach(() => {
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: query === "(min-width: 768px)",
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+});
 
 vi.mock("next/image", () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
@@ -32,8 +45,12 @@ vi.mock("motion/react", () => ({
     },
   ),
   useScroll: () => ({ scrollYProgress: mockScrollYProgress }),
-  useTransform: () => 1,
+  useTransform: () => ({
+    get: () => 0,
+    on: () => () => {},
+  }),
   useMotionTemplate: () => "blur(0px)",
+  useMotionValueEvent: vi.fn(),
   useReducedMotion: () => false,
   motionValue: (v: number) => ({
     get: () => v,

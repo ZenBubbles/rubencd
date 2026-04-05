@@ -10,15 +10,12 @@ describe("FeaturedArticle", () => {
     expect(source).toContain("async function FeaturedArticle");
   });
 
-  it("links to the software and saas article", () => {
-    expect(source).toContain("/blog/is-software-and-saas-dying");
+  it("links to the claude skills article", () => {
+    expect(source).toContain("/blog/claude-skills");
   });
 
-  it("uses translation keys for featured article content", () => {
-    expect(source).toContain('t("featured.title")');
-    expect(source).toContain('t("featured.excerpt")');
+  it("uses translation key for read full story CTA", () => {
     expect(source).toContain('t("readFullStory")');
-    expect(source).toContain('t("featured.imageAlt")');
   });
 
   it("uses Link from i18n routing", () => {
