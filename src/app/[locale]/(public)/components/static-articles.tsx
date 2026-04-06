@@ -25,6 +25,17 @@ const STATIC_ARTICLES: StaticArticle[] = [
     imageAlt:
       "Comparison of two smartphones: one empty representing Claude without skills, one loaded with skill apps",
   },
+  {
+    slug: "tmux-is-your-cockpit",
+    title:
+      "You're Running 4 Terminal Windows in 2026. A 10x Engineer Just Walked Past Your Screen and Laughed.",
+    excerpt:
+      "The difference is not talent. It is Tmux. Why the terminal multiplexer is your cockpit in the AI agent era.",
+    category: "My Guides",
+    date: "Apr 5, 2026",
+    readTime: "7 MIN READ",
+    imageAlt: "A tmux terminal showing three AI agents running in parallel panes",
+  },
 ];
 
 export function StaticArticles() {

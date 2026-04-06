@@ -3,6 +3,7 @@ export { PostCard } from "./components/post-card";
 export { PostBody } from "./components/post-body";
 export { CategoryTabs } from "./components/category-tabs";
 export { SkillsArticle } from "./components/skills-article";
+export { TmuxArticle } from "./components/tmux-article";
 export { ArticleAuthor } from "./components/article-author";
 export { ArticleLayout } from "./components/article-layout";
 export { getPosts } from "./queries/get-posts";

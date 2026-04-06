@@ -64,6 +64,67 @@ function SkillsCard() {
   );
 }
 
+function TmuxCard() {
+  return (
+    <article className="group flex flex-col">
+      <Link
+        href="/blog/tmux-is-your-cockpit"
+        className="flex h-full cursor-pointer flex-col overflow-hidden rounded-sm border border-[#E5E5E5]/80 bg-white transition-shadow duration-300 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] focus-visible:ring-2 focus-visible:ring-[#12271d]/40 focus-visible:ring-offset-4 focus-visible:ring-offset-[#fafaf8] focus-visible:outline-none"
+      >
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0a]">
+          <div className="flex h-full items-center justify-center p-6">
+            <div className="w-full max-w-[280px] rounded-lg border border-[#333] bg-[#1a1a1a] p-3">
+              <div className="mb-2 flex gap-1">
+                <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
+                <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
+                <span className="h-2 w-2 rounded-full bg-[#28c840]" />
+              </div>
+              <div className="grid grid-cols-2 gap-px bg-[#444]">
+                <div className="bg-[#0d0d0d] p-1.5 font-mono text-[6px] text-[#bd93f9]">
+                  claude code
+                </div>
+                <div className="bg-[#0d0d0d] p-1.5 font-mono text-[6px] text-[#8be9fd]">
+                  codex review
+                </div>
+                <div className="col-span-2 bg-[#0d0d0d] p-1.5 font-mono text-[6px] text-[#50fa7b]">
+                  test suite ✓
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-0 ring-1 ring-black/5 ring-inset" />
+        </div>
+
+        <div className="flex flex-1 flex-col p-6">
+          <div className="mb-4 flex items-center gap-3 text-xs tracking-widest text-[#999]">
+            <span className="font-semibold text-[#12271d] uppercase">My Guides</span>
+            <span className="text-[#d4d4d4]">/</span>
+            <span>Apr 5, 2026</span>
+          </div>
+
+          <h3 className="mb-4 font-serif text-[1.375rem] leading-[1.3] font-light text-[#1a1a1a] transition-colors duration-200 group-hover:text-[#12271d]">
+            You&apos;re Running 4 Terminal Windows in 2026. A 10x Engineer Just Walked Past Your
+            Screen and Laughed.
+          </h3>
+
+          <p className="mb-6 line-clamp-3 text-[14px] leading-[1.8] font-light text-[#707070]">
+            The difference is not talent. It is Tmux. Why the terminal multiplexer is your cockpit
+            in the AI agent era.
+          </p>
+
+          <div className="mt-auto flex items-center gap-3 border-t border-[#E5E5E5]/60 pt-5">
+            <span className="text-[11px] font-medium tracking-[0.1em] text-[#999] uppercase">
+              7 min read
+            </span>
+            <span className="h-px flex-1 bg-[#E5E5E5]/40" />
+            <span className="h-px w-6 bg-[#1a1a1a] transition-all duration-300 group-hover:w-10 group-hover:bg-[#12271d]" />
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+}
+
 export function CategoryTabs({ posts, allLabel = "All" }: CategoryTabsProps) {
   const [active, setActive] = useState<string | null>(null);
 
@@ -71,8 +132,9 @@ export function CategoryTabs({ posts, allLabel = "All" }: CategoryTabsProps) {
     ? posts.filter((p) => p.categories.some((c) => c.slug === active))
     : posts;
 
-  // Show the static skills card when "All" tab is active (no filter)
+  // Show static cards when "All" tab or matching category is active
   const showSkillsCard = active === null || active === "my-guides";
+  const showTmuxCard = active === null || active === "my-guides";
 
   return (
     <div>
@@ -115,12 +177,13 @@ export function CategoryTabs({ posts, allLabel = "All" }: CategoryTabsProps) {
       </div>
 
       <div role="tabpanel">
-        {filtered.length === 0 && !showSkillsCard ? (
+        {filtered.length === 0 && !showSkillsCard && !showTmuxCard ? (
           <p className="py-20 text-center font-serif text-lg font-light text-[#999] italic">
             No articles in this category yet.
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-x-12 gap-y-20 md:grid-cols-2 lg:grid-cols-3">
+            {showTmuxCard && <TmuxCard />}
             {showSkillsCard && <SkillsCard />}
             {filtered.map((post) => (
               <PostCard key={post._id} post={post} />

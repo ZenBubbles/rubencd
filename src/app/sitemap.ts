@@ -33,7 +33,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   // Static article pages (hardcoded routes that are NOT in Sanity)
-  const staticArticleSlugs = ["is-software-and-saas-dying", "claude-skills"];
+  const staticArticleSlugs = [
+    "is-software-and-saas-dying",
+    "claude-skills",
+    "tmux-is-your-cockpit",
+  ];
 
   const staticArticles: MetadataRoute.Sitemap = staticArticleSlugs.flatMap((slug) => [
     {
