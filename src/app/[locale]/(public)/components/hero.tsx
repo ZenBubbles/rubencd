@@ -58,11 +58,11 @@ export function Hero({ onScrollProgress }: HeroProps) {
     return () => onScrollProgress?.(null);
   }, [scrollYProgress, onScrollProgress]);
 
-  // Container zoom: slow cinematic dolly-in toward the face (0% → 30%)
+  // Container zoom: subtle dolly-in toward the face (0% → 20%)
   const containerScale = useTransform(
     scrollYProgress,
-    [0, 0.3],
-    prefersReducedMotion ? [1, 1] : [1.0, 2.5],
+    [0, 0.2],
+    prefersReducedMotion ? [1, 1] : [1.0, 1.2],
   );
 
   // Name fadeout (0% → 12%)
@@ -82,48 +82,44 @@ export function Hero({ onScrollProgress }: HeroProps) {
   );
   const vignetteWidth = useTransform(
     scrollYProgress,
-    [0, 0.38],
+    [0, 0.2],
     prefersReducedMotion ? ["40%", "40%"] : ["40%", "50%"],
   );
-  const grainOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0.6, 0]);
+  const grainOpacity = useTransform(scrollYProgress, [0.2, 0.35], [0.6, 0]);
 
-  // Split (38% → 80%) — starts after zoom completes with breathing room
+  // Split (20% → 65%) — begins as the gentle zoom finishes
   const leftX = useTransform(
     scrollYProgress,
-    [0.38, 0.8],
+    [0.2, 0.65],
     prefersReducedMotion ? ["0%", "0%"] : ["0%", "-105%"],
   );
   const rightX = useTransform(
     scrollYProgress,
-    [0.38, 0.8],
+    [0.2, 0.65],
     prefersReducedMotion ? ["0%", "0%"] : ["0%", "105%"],
   );
   const splitShadowOpacity = useTransform(
     scrollYProgress,
-    [0.42, 0.55, 0.72],
+    [0.25, 0.4, 0.55],
     prefersReducedMotion ? [0, 0, 0] : [0, 1, 0],
   );
 
-  // Reveal illustration: visible during split, fades out as hero unpins
+  // Reveal illustration: fades in as halves part, holds visible, melts out at the end
   const illustrationOpacity = useTransform(
     scrollYProgress,
-    [0.38, 0.48, 0.85, 1.0],
+    [0.2, 0.3, 0.9, 1.0],
     prefersReducedMotion ? [0, 0, 0, 0] : [0, 1, 1, 0],
   );
 
   // Bottom gradient that melts the illustration into the white section
   const bottomFadeOpacity = useTransform(
     scrollYProgress,
-    [0.85, 1.0],
+    [0.9, 1.0],
     prefersReducedMotion ? [0, 0] : [0, 1],
   );
 
   // Background stays dark while illustration is visible, then transitions to light
-  const bgColor = useTransform(
-    scrollYProgress,
-    [0.38, 0.85, 1.0],
-    ["#111111", "#111111", "#FAFAF8"],
-  );
+  const bgColor = useTransform(scrollYProgress, [0.2, 0.9, 1.0], ["#111111", "#111111", "#FAFAF8"]);
 
   return (
     <div ref={wrapperRef} style={{ height: "500vh", position: "relative" }}>
@@ -148,11 +144,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
         >
           {/* Video canvas (renders on top when frames are loaded) */}
           {!prefersReducedMotion && (
-            <HeroVideoReveal
-              scrollYProgress={scrollYProgress}
-              scrollStart={0.38}
-              scrollEnd={0.85}
-            />
+            <HeroVideoReveal scrollYProgress={scrollYProgress} scrollStart={0.2} scrollEnd={0.9} />
           )}
 
           {/* Illustration fallback — visible immediately, hidden by canvas when frames load */}
@@ -204,7 +196,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
             style={{
               position: "absolute",
               inset: 0,
-              clipPath: "inset(0 50% 0 0)",
+              clipPath: "inset(0 calc(50% - 1px) 0 0)",
               x: leftX,
               zIndex: 10,
               willChange: "transform",
@@ -237,7 +229,7 @@ export function Hero({ onScrollProgress }: HeroProps) {
             style={{
               position: "absolute",
               inset: 0,
-              clipPath: "inset(0 0 0 50%)",
+              clipPath: "inset(0 0 0 calc(50% - 1px))",
               x: rightX,
               zIndex: 10,
               willChange: "transform",

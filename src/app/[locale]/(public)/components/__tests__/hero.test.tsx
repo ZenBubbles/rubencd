@@ -178,7 +178,7 @@ describe("Hero", () => {
   it("left image half has correct clipPath", () => {
     const { container } = render(<Hero />);
     const leftHalf = Array.from(container.querySelectorAll('[style*="clip-path"]')).find(
-      (el) => (el as HTMLElement).style.clipPath === "inset(0 50% 0 0)",
+      (el) => (el as HTMLElement).style.clipPath === "inset(0 calc(50% - 1px) 0 0)",
     );
     expect(leftHalf).toBeTruthy();
   });
@@ -186,7 +186,7 @@ describe("Hero", () => {
   it("right image half has correct clipPath", () => {
     const { container } = render(<Hero />);
     const rightHalf = Array.from(container.querySelectorAll('[style*="clip-path"]')).find(
-      (el) => (el as HTMLElement).style.clipPath === "inset(0 0 0 50%)",
+      (el) => (el as HTMLElement).style.clipPath === "inset(0 0 0 calc(50% - 1px))",
     );
     expect(rightHalf).toBeTruthy();
   });
