@@ -10,8 +10,8 @@ describe("FeaturedArticle", () => {
     expect(source).toContain("async function FeaturedArticle");
   });
 
-  it("links to the claude skills article", () => {
-    expect(source).toContain("/blog/claude-skills");
+  it("links to the viral coefficient article", () => {
+    expect(source).toContain("/blog/viral-coefficient");
   });
 
   it("uses translation key for read full story CTA", () => {

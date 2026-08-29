@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import type { PostCardData } from "../types";
 import { PostCard } from "./post-card";
+import { ViralCurvesIllustration } from "./viral-curves-illustration";
 
 interface CategoryTabsProps {
   posts: PostCardData[];
@@ -16,6 +17,50 @@ const CATEGORIES = [
   { slug: "my-guides", label: "My Guides" },
   { slug: "builder-notes", label: "Builder Notes" },
 ] as const;
+
+function ViralCard() {
+  return (
+    <article className="group flex flex-col">
+      <Link
+        href="/blog/viral-coefficient"
+        className="flex h-full cursor-pointer flex-col overflow-hidden rounded-sm border border-[#E5E5E5]/80 bg-white transition-shadow duration-300 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] focus-visible:ring-2 focus-visible:ring-[#12271d]/40 focus-visible:ring-offset-4 focus-visible:ring-offset-[#fafaf8] focus-visible:outline-none"
+      >
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0a]">
+          <div className="flex h-full items-center justify-center p-6">
+            <ViralCurvesIllustration className="h-full w-full max-w-[300px] transition-transform duration-700 group-hover:scale-[1.03]" />
+          </div>
+          <div className="absolute inset-0 ring-1 ring-black/5 ring-inset" />
+        </div>
+
+        <div className="flex flex-1 flex-col p-6">
+          <div className="mb-4 flex items-center gap-3 text-xs tracking-widest text-[#999]">
+            <span className="font-semibold text-[#12271d] uppercase">Builder Notes</span>
+            <span className="text-[#d4d4d4]">/</span>
+            <span>Aug 29, 2026</span>
+          </div>
+
+          <h3 className="mb-4 font-serif text-[1.375rem] leading-[1.3] font-light text-[#1a1a1a] transition-colors duration-200 group-hover:text-[#12271d]">
+            The Difference Between 891 Users and 3.2 Million Is a Decimal Point
+          </h3>
+
+          <p className="mb-6 line-clamp-3 text-[14px] leading-[1.8] font-light text-[#707070]">
+            The viral coefficient is how many new users each converted user brings with them. Seed
+            100 users, run 20 cycles, and a few decimals of K decide whether you end up with 891
+            users or 3.22 million.
+          </p>
+
+          <div className="mt-auto flex items-center gap-3 border-t border-[#E5E5E5]/60 pt-5">
+            <span className="text-[11px] font-medium tracking-[0.1em] text-[#999] uppercase">
+              4 min read
+            </span>
+            <span className="h-px flex-1 bg-[#E5E5E5]/40" />
+            <span className="h-px w-6 bg-[#1a1a1a] transition-all duration-300 group-hover:w-10 group-hover:bg-[#12271d]" />
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+}
 
 function SkillsCard() {
   return (
@@ -133,6 +178,7 @@ export function CategoryTabs({ posts, allLabel = "All" }: CategoryTabsProps) {
     : posts;
 
   // Show static cards when "All" tab or matching category is active
+  const showViralCard = active === null || active === "builder-notes";
   const showSkillsCard = active === null || active === "my-guides";
   const showTmuxCard = active === null || active === "my-guides";
 
@@ -177,12 +223,13 @@ export function CategoryTabs({ posts, allLabel = "All" }: CategoryTabsProps) {
       </div>
 
       <div role="tabpanel">
-        {filtered.length === 0 && !showSkillsCard && !showTmuxCard ? (
+        {filtered.length === 0 && !showViralCard && !showSkillsCard && !showTmuxCard ? (
           <p className="py-20 text-center font-serif text-lg font-light text-[#999] italic">
             No articles in this category yet.
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-x-12 gap-y-20 md:grid-cols-2 lg:grid-cols-3">
+            {showViralCard && <ViralCard />}
             {showTmuxCard && <TmuxCard />}
             {showSkillsCard && <SkillsCard />}
             {filtered.map((post) => (
