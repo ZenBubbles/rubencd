@@ -37,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "is-software-and-saas-dying",
     "claude-skills",
     "tmux-is-your-cockpit",
+    "viral-coefficient",
   ];
 
   const staticArticles: MetadataRoute.Sitemap = staticArticleSlugs.flatMap((slug) => [
