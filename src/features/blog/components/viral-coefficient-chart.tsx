@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 
 const SEED = 100;
 const CYCLES = 20;
@@ -127,6 +127,11 @@ interface ChartCanvasProps {
 
 function ChartCanvas({ layout: l, scale, hoverCycle, onHover, className = "" }: ChartCanvasProps) {
   const prefersReduced = useReducedMotion();
+  // WebKit's IntersectionObserver is unreliable on SVG child elements, so the
+  // draw-in trigger observes the HTML wrapper instead of the paths themselves.
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(containerRef, { once: true, margin: "-60px" });
+  const revealed = prefersReduced || inView;
   const yTicks = scale === "log" ? LOG_TICKS : LINEAR_TICKS;
 
   // Linear scale: only the two runaway endpoints get direct labels (the rest
@@ -140,7 +145,7 @@ function ChartCanvas({ layout: l, scale, hoverCycle, onHover, className = "" }: 
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div ref={containerRef} className={`relative ${className}`}>
       <svg
         viewBox={`0 0 ${l.w} ${l.h}`}
         className="h-auto w-full"
@@ -220,8 +225,7 @@ function ChartCanvas({ layout: l, scale, hoverCycle, onHover, className = "" }: 
             strokeLinecap="round"
             strokeLinejoin="round"
             initial={prefersReduced ? {} : { pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
+            animate={{ pathLength: revealed ? 1 : 0 }}
             transition={{ duration: 1.1, delay: index * 0.12, ease: "easeInOut" }}
           />
         ))}
@@ -241,8 +245,7 @@ function ChartCanvas({ layout: l, scale, hoverCycle, onHover, className = "" }: 
 
         <motion.g
           initial={prefersReduced ? {} : { opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
+          animate={{ opacity: revealed ? 1 : 0 }}
           transition={{ duration: 0.5, delay: prefersReduced ? 0 : 1.4 }}
         >
           {SERIES.map((s) => (
